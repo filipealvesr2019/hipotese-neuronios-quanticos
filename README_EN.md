@@ -2,6 +2,8 @@
 
 *Leia isto em [Português](README.md).*
 
+> **Disclaimer:** I am not making any academic claims or definitive discoveries here. I am just a computer scientist building and exploring new ideas out of curiosity. Everything here is purely experimental.
+
 **Description:**  
 This project explores the hypothesis that architectures with compact internal experts, combined with intelligent routing (Sparse Routing) and skip connections, can match the performance of traditional neural networks (MLPs) while requiring significantly lower computational cost (reduced FLOPs). The project evolved from the exploratory idea of "multi-state neurons" into a Mixture of Experts (MoE) micro-framework.
 

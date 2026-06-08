@@ -2,6 +2,8 @@
 
 *Read this in [English](README_EN.md).*
 
+> **Disclaimer:** Não estou fazendo nenhuma afirmação acadêmica ou descoberta definitiva. Sou apenas um cientista da computação criando e explorando novas ideias por curiosidade. Tudo aqui é puramente experimental.
+
 **Descrição:**  
 Este projeto explora a hipótese de que arquiteturas com especialistas internos compactos, combinadas com roteamento inteligente (Sparse Routing) e skip connections, conseguem reproduzir o desempenho de redes neurais tradicionais (MLPs) exigindo um custo computacional significativamente menor (FLOPs reduzidos). O projeto evoluiu da ideia exploratória de "neurônios com múltiplos estados" para um micro-framework de Mistura de Especialistas (MoE).
 
