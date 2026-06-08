@@ -47,3 +47,6 @@ A penalidade auxiliar (V4.1) não melhorou a accuracy nem diversificou o uso dos
 
 ⚠️ **Sem evidência de escalabilidade para LLMs.**
 Todos os testes foram em redes rasas (2 camadas) e datasets pequenos. A hipótese de que a arquitetura funciona em Transformers ainda é um experimento futuro.
+
+⚠️ **MNIST preliminar ainda não confirma a hipótese forte.**
+Em single seed, a V4 ficou próxima do MLP (92.97% vs 93.80%), mas com redução pequena de FLOPs estimados (~1.5%). O resultado é promissor como sobrevivência ao MNIST, mas ainda exige curva Accuracy/FLOPs e múltiplas seeds.

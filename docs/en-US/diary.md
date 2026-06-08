@@ -62,3 +62,26 @@
 **Main risk:** All experiments are still small, with low dimensionality and few classes. There is not enough evidence yet to claim scalability to real computer vision or Transformers.
 
 **Next critical milestone:** MNIST.
+
+---
+
+### Experiment 6: E1 MNIST Preliminary Run (Single Seed)
+**Hypothesis:** V4 Sparse can maintain performance close to a traditional MLP on MNIST while using fewer inference FLOPs.
+**Status:** Partially supported, still inconclusive.
+
+**Setup:**
+- Dataset: full MNIST (60,000 train, 10,000 test)
+- Seed: 1
+- Epochs: 5
+- Traditional MLP: hidden=128
+- V4 Sparse: hidden=53, 4 experts, gate_hidden=32
+- V4 criterion: largest automatic hidden size below the baseline FLOPs ceiling
+
+**Result:**
+- Traditional MLP: 93.80% accuracy, 236,032 estimated FLOPs/sample
+- V4 Sparse: 92.97% accuracy, 232,584 estimated sparse FLOPs/sample
+- Accuracy difference: -0.83pp for V4
+
+**Observation:** V4 survived MNIST and stayed close to the MLP, but the FLOPs gain in this configuration was small (~1.5%). In wall-clock time, the NumPy V4 implementation was slower because training still computes all experts and sparse inference uses Python/NumPy masking rather than optimized kernels.
+
+**Provisional conclusion:** MNIST did not refute V4, but it also did not yet confirm the strong hypothesis of same accuracy with a substantial FLOPs reduction. The next step is an Accuracy/FLOPs curve across multiple hidden sizes and seeds.

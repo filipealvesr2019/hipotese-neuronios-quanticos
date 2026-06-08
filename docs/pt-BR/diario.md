@@ -99,3 +99,26 @@
 **Risco principal:** Todos os testes ainda estão em problemas pequenos, com poucas dimensões e poucas classes. Ainda não há evidência suficiente para afirmar escalabilidade para visão computacional real ou Transformers.
 
 **Próximo marco crítico:** MNIST.
+
+---
+
+### Experimento 10 — E1 MNIST Preliminar (Single Seed)
+**Hipótese:** A V4 Sparse consegue manter desempenho próximo ao MLP tradicional em MNIST usando menos FLOPs de inferência.
+**Status:** Parcialmente confirmado, ainda inconclusivo.
+
+**Configuração:**
+- Dataset: MNIST completo (60.000 treino, 10.000 teste)
+- Seed: 1
+- Épocas: 5
+- MLP Tradicional: hidden=128
+- V4 Sparse: hidden=53, 4 especialistas, gate_hidden=32
+- Critério V4: maior hidden automático abaixo do teto de FLOPs do baseline
+
+**Resultado:**
+- MLP Tradicional: 93.80% accuracy, 236.032 FLOPs estimados/amostra
+- V4 Sparse: 92.97% accuracy, 232.584 FLOPs esparsos estimados/amostra
+- Diferença de accuracy: -0.83pp para V4
+
+**Observação:** A V4 sobreviveu ao MNIST e ficou próxima do MLP, mas o ganho de FLOPs nesta configuração foi pequeno (~1.5%). Em tempo real, a implementação NumPy da V4 foi mais lenta porque o treino ainda calcula todos os especialistas e a inferência esparsa usa máscaras Python/NumPy, não kernels otimizados.
+
+**Conclusão provisória:** MNIST não refutou a V4, mas também não confirmou ainda a hipótese forte de mesma accuracy com redução substancial de FLOPs. O próximo passo é rodar uma curva Accuracy/FLOPs com múltiplos `hidden` e múltiplas seeds.
