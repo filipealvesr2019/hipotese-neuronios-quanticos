@@ -68,3 +68,5 @@ Há redução forte de FLOPs em problemas pequenos, mas o MNIST preliminar ainda
 Especialização de especialistas, roteamento efetivo e colapso recorrente da Layer 2 aparecem em múltiplos domínios. A questão aberta é se isso escala.
 
 **Prioridade atual:** fechar MNIST com curva Accuracy/FLOPs antes de avançar para CIFAR.
+
+**Atualização E2 MNIST:** a primeira matriz Accuracy/FLOPs em seed 1 não favoreceu a V4. O MLP 64 foi mais preciso e mais barato que V4 64/128/256. Isso sugere que a versão atual da V4 é eficiente em problemas pequenos, mas paga overhead demais em MNIST.

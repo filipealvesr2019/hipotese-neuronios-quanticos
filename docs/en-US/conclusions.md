@@ -41,3 +41,5 @@ There is a strong FLOPs reduction on small problems, but the preliminary MNIST r
 Expert specialization, effective routing, and recurring Layer 2 collapse appear across multiple domains. The open question is whether this scales.
 
 **Current priority:** close MNIST with an Accuracy/FLOPs curve before moving to CIFAR.
+
+**E2 MNIST update:** the first seed-1 Accuracy/FLOPs matrix did not favor V4. MLP 64 was more accurate and cheaper than V4 64/128/256. This suggests the current V4 is efficient on small problems, but pays too much overhead on MNIST.

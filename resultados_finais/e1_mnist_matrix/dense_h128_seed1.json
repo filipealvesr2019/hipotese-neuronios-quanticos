@@ -1,0 +1,46 @@
+{
+  "experiment": "E1_MNIST",
+  "model_mode": "dense",
+  "seed": 1,
+  "dataset": {
+    "train": 60000,
+    "test": 10000,
+    "input_dim": 784,
+    "classes": 10
+  },
+  "dense": {
+    "hidden": 128,
+    "params": 118282,
+    "accuracy": 0.938,
+    "train_time_sec": 16.20423239999218,
+    "inference_time_sec": 0.11029819998657331,
+    "estimated_inference_flops_per_sample": 236032,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.7912126494221715,
+        "test_acc": 0.8902
+      },
+      {
+        "epoch": 2,
+        "loss": 0.3270874190607903,
+        "test_acc": 0.9152
+      },
+      {
+        "epoch": 3,
+        "loss": 0.2563836320064643,
+        "test_acc": 0.9272
+      },
+      {
+        "epoch": 4,
+        "loss": 0.21985099748312237,
+        "test_acc": 0.9325
+      },
+      {
+        "epoch": 5,
+        "loss": 0.1961196601097012,
+        "test_acc": 0.938
+      }
+    ]
+  }
+}

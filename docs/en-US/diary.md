@@ -99,3 +99,31 @@ MLP 256 ≈ V4 128
 That would suggest specialization is replacing part of the active width of the dense network.
 
 **Next official milestone:** close MNIST with the `10 seeds × 6 configurations` matrix before moving to CIFAR.
+
+---
+
+### Experiment 7: E2 MNIST Accuracy/FLOPs Matrix (Seed 1)
+**Hypothesis:** On MNIST, some V4 configuration (64, 128, 256 hidden) beats the efficiency curve of the traditional MLP (64, 128, 256 hidden).
+**Result:** Refuted in this initial configuration.
+
+**Setup:**
+- Dataset: full MNIST (60,000 train, 10,000 test)
+- Seed: 1
+- Epochs: 5
+- MLP: hidden 64, 128, 256
+- V4 Sparse: hidden 64, 128, 256; 4 experts; gate_hidden=32
+
+**Results:**
+
+| Model | Hidden | Accuracy | FLOPs/sample | Params | Acc/MFLOP |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| MLP | 64 | 93.71% | 109,824 | 55,050 | 8.5327 |
+| MLP | 128 | 93.80% | 236,032 | 118,282 | 3.9740 |
+| MLP | 256 | 94.13% | 537,600 | 269,322 | 1.7509 |
+| V4 | 64 | 92.70% | 273,152 | 300,114 | 3.3937 |
+| V4 | 128 | 93.30% | 528,384 | 615,762 | 1.7658 |
+| V4 | 256 | 93.31% | 1,137,152 | 1,369,938 | 0.8206 |
+
+**Conclusion:** V4 learns MNIST and stays close in accuracy, but it does not beat the efficiency curve. MLP 64 was both cheaper and more accurate than every V4 tested in this matrix.
+
+**Interpretation:** In high-dimensional inputs, the cost of the gate, skip path, and expert structure may outweigh the savings from Top-1 routing. The next step should not be CIFAR or blind 10-seed repetition of this configuration; it should be a more economical V4 variant for MNIST.
