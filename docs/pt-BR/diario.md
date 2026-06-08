@@ -243,3 +243,28 @@ Isso indicaria que a especialização está substituindo parte da largura ativa 
 **Conclusão:** Gate 6 não superou gate 8. O logging de entropia confirmou novamente o padrão estrutural: Layer 1 tende a usar os especialistas de forma distribuída, enquanto Layer 2 frequentemente colapsa. A exceção parcial foi `hidden=128/gate=6`, com L2 mais distribuída, mas sem ganho de accuracy.
 
 **Próxima direção:** repetir as melhores configurações com logging novo (`h96/g8` e `h128/g8`), testar mais épocas e ajustar learning rate/temperatura.
+
+---
+
+### Experimento 15 — Definição da Arena de Arquiteturas
+**Motivação:** Evitar apego excessivo à V4. A V4 econômica mostrou sinais promissores, mas o gargalo pode estar na própria família arquitetural.
+
+**Decisão:** Criar uma arena onde MLP, V4 e novas variantes competem sob o mesmo protocolo.
+
+**Regras:**
+- Mesmo dataset
+- Mesmas seeds
+- Mesmo número de épocas
+- Mesmo batch size
+- Mesmo otimizador
+- Mesmo cálculo de FLOPs
+- Mesmo registro de accuracy, tempo, parâmetros e entropia
+
+**Desafiantes planejados:**
+- V5: competição direta entre especialistas, sem gate externo
+- V6: Top-2 sparse routing
+- V7: árvore hierárquica de especialistas
+- V8: gate com memória de uso
+- V9: especialistas low-rank
+
+**Conclusão:** A V4 não será abandonada. Ela passa a ser o baseline experimental da arena. Novas arquiteturas só sobrevivem se superarem V4/MLP em accuracy, FLOPs ou estabilidade de roteamento.

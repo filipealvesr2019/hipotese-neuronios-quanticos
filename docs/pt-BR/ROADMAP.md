@@ -115,3 +115,24 @@ GPT mini local
 ```
 
 Medir loss, perplexity, tokens/s, VRAM e FLOPs estimados.
+
+## E9 — Arena de Arquiteturas
+
+**Pergunta:** A resposta está dentro da família V4 ou existe uma arquitetura melhor de roteamento/especialização?
+
+Estrutura:
+
+```text
+arena/
+baseline_mlp
+v4_sparse_top1
+v5_competicao
+v6_top2
+v7_arvore
+v8_memoria
+v9_low_rank
+```
+
+**Regra central:** mesmas seeds, dataset, épocas, otimizador, batch size e cálculo de FLOPs.
+
+**Status:** especificação inicial criada em `arena/`. V4 econômica passa a ser baseline experimental; V5-V9 entram como desafiantes.

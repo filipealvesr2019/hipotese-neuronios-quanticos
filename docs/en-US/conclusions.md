@@ -49,3 +49,5 @@ Expert specialization, effective routing, and recurring Layer 2 collapse appear 
 **Intermediate update:** `hidden=96, 2 states, gate=8, no skip` reached 93.59% with 185,024 FLOPs, cheaper than MLP 128 but -0.21pp in accuracy. `hidden=112` did not improve. This suggests a non-monotonic curve and shifts the next question toward optimization/routing.
 
 **Gate/entropy update:** gate 6 did not beat gate 8. The new per-epoch logging again confirmed distributed Layer 1 usage and frequent Layer 2 collapse, suggesting the next improvement depends on optimization/routing rather than gate size alone.
+
+**Arena update:** economic V4 becomes the experimental baseline, not the final destination. The next phase compares V4 against V5-V9 variants under the same protocol to determine whether the bottleneck is local optimization or the routing architecture itself.

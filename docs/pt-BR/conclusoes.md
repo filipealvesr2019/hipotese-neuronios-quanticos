@@ -76,3 +76,5 @@ Especialização de especialistas, roteamento efetivo e colapso recorrente da La
 **Atualização Intermediária:** `hidden=96, 2 estados, gate=8, sem skip` atingiu 93.59% com 185.024 FLOPs, abaixo do MLP 128 em custo mas -0.21pp em accuracy. `hidden=112` não melhorou. Isso sugere uma curva não monotônica e desloca a próxima pergunta para otimização/roteamento.
 
 **Atualização Gate/Entropia:** gate 6 não superou gate 8. O novo logging por época confirmou novamente Layer 1 distribuída e Layer 2 frequentemente colapsada, indicando que a próxima melhoria depende de otimização/roteamento, não apenas de tamanho do gate.
+
+**Atualização Arena:** a V4 econômica passa a ser baseline experimental, não destino final. A próxima fase compara V4 contra variantes V5-V9 sob o mesmo protocolo para descobrir se o gargalo está na otimização local ou na própria arquitetura de roteamento.

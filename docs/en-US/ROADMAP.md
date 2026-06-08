@@ -115,3 +115,24 @@ local GPT mini
 ```
 
 Measure loss, perplexity, tokens/s, VRAM, and estimated FLOPs.
+
+## E9 — Architecture Arena
+
+**Question:** Is the answer inside the V4 family, or is there a better routing/specialization architecture?
+
+Structure:
+
+```text
+arena/
+baseline_mlp
+v4_sparse_top1
+v5_competition
+v6_top2
+v7_tree
+v8_memory
+v9_low_rank
+```
+
+**Core rule:** same seeds, dataset, epochs, optimizer, batch size, and FLOPs calculation.
+
+**Status:** initial specification created in `arena/`. Economic V4 becomes the experimental baseline; V5-V9 enter as challengers.

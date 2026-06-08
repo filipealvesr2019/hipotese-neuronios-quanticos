@@ -206,3 +206,28 @@ That would suggest specialization is replacing part of the active width of the d
 **Conclusion:** Gate 6 did not beat gate 8. Entropy logging confirmed the structural pattern again: Layer 1 tends to use experts in a distributed way, while Layer 2 frequently collapses. The partial exception was `hidden=128/gate=6`, with a more distributed Layer 2, but without an accuracy gain.
 
 **Next direction:** rerun the best configurations with the new logging (`h96/g8` and `h128/g8`), test more epochs, and tune learning rate/temperature.
+
+---
+
+### Experiment 11: Architecture Arena Definition
+**Motivation:** Avoid overfitting the research process to V4. Economic V4 showed promising signs, but the bottleneck may be in the architectural family itself.
+
+**Decision:** Create an arena where MLP, V4, and new variants compete under the same protocol.
+
+**Rules:**
+- Same dataset
+- Same seeds
+- Same number of epochs
+- Same batch size
+- Same optimizer
+- Same FLOPs calculation
+- Same logging of accuracy, time, parameters, and entropy
+
+**Planned challengers:**
+- V5: direct expert competition, without an external gate
+- V6: Top-2 sparse routing
+- V7: hierarchical expert tree
+- V8: usage-memory gate
+- V9: low-rank experts
+
+**Conclusion:** V4 will not be abandoned. It becomes the experimental baseline of the arena. New architectures only survive if they beat V4/MLP in accuracy, FLOPs, or routing stability.
