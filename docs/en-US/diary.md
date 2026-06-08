@@ -153,3 +153,29 @@ That would suggest specialization is replacing part of the active width of the d
 **Conclusion:** The economic direction is correct: 2 states, a small gate, and no skip greatly improve cost-effectiveness. The best economic V4 beat MLP 128 in accuracy (+0.12pp), but still used ~6.2% more FLOPs. The economic V4 64 got close to MLP 64, but still lost in both accuracy and FLOPs.
 
 **Next target:** test V4 hidden 96, 2 states, gate 4/8, no skip. The goal is to find an intermediate point that keeps ~93.7-93.9% with fewer FLOPs than MLP 128.
+
+---
+
+### Experiment 9: MNIST Intermediate Economic V4 (Hidden 96/112)
+**Hypothesis:** An intermediate point between V4 64 and V4 128 can preserve accuracy close to MLP 128 with fewer FLOPs.
+**Result:** Not confirmed yet.
+
+**Setup:**
+- Dataset: full MNIST
+- Seed: 1
+- Epochs: 5
+- V4: 2 states, no skip
+- Hidden tested: 96 and 112
+- Gate tested: 4 and 8
+
+**Main results:**
+
+| Model | Hidden | States | Gate | Skip | Accuracy | FLOPs/sample | Acc/MFLOP |
+| --- | ---: | ---: | ---: | --- | ---: | ---: | ---: |
+| MLP | 128 | - | - | - | 93.80% | 236,032 | 3.9740 |
+| V4 | 96 | 2 | 8 | no | 93.59% | 185,024 | 5.0583 |
+| V4 | 112 | 2 | 8 | no | 93.08% | 217,344 | 4.2826 |
+
+**Conclusion:** V4 96/gate 8 used fewer FLOPs than MLP 128 and stayed relatively close in accuracy (-0.21pp), but did not reach the target. V4 112 got worse, suggesting the curve is not monotonic with hidden size and the current problem is likely optimization/routing, not just width.
+
+**Next direction:** test more epochs, lower learning rate, gate temperature, and per-epoch entropy/expert usage for the best economic configurations.

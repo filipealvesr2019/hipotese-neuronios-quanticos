@@ -45,3 +45,5 @@ Expert specialization, effective routing, and recurring Layer 2 collapse appear 
 **E2 MNIST update:** the first seed-1 Accuracy/FLOPs matrix did not favor V4. MLP 64 was more accurate and cheaper than V4 64/128/256. This suggests the current V4 is efficient on small problems, but pays too much overhead on MNIST.
 
 **Economic V4 update:** reducing overhead partially worked. The `hidden=128, 2 states, gate=8, no skip` configuration reached 93.92% vs 93.80% for MLP 128, but still used ~6.2% more FLOPs. The promising direction is now to explore intermediate points such as `hidden=96, 2 states, gate=4/8, no skip`.
+
+**Intermediate update:** `hidden=96, 2 states, gate=8, no skip` reached 93.59% with 185,024 FLOPs, cheaper than MLP 128 but -0.21pp in accuracy. `hidden=112` did not improve. This suggests a non-monotonic curve and shifts the next question toward optimization/routing.

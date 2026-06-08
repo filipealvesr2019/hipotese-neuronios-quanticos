@@ -190,3 +190,29 @@ Isso indicaria que a especialização está substituindo parte da largura ativa 
 **Conclusão:** A direção econômica é correta: 2 estados, gate pequeno e sem skip melhoram muito o custo-benefício. A melhor V4 econômica superou o MLP 128 em accuracy (+0.12pp), mas ainda usou ~6.2% mais FLOPs. A V4 64 econômica ficou próxima do MLP 64, mas ainda perdeu em accuracy e FLOPs.
 
 **Próximo alvo:** testar V4 hidden 96, 2 estados, gate 4/8, sem skip. O objetivo é encontrar um ponto intermediário que mantenha ~93.7-93.9% com menos FLOPs que MLP 128.
+
+---
+
+### Experimento 13 — MNIST V4 Econômica Intermediária (Hidden 96/112)
+**Hipótese:** Um ponto intermediário entre V4 64 e V4 128 pode manter accuracy próxima do MLP 128 com menos FLOPs.
+**Resultado:** Ainda não confirmado.
+
+**Configuração:**
+- Dataset: MNIST completo
+- Seed: 1
+- Épocas: 5
+- V4: 2 estados, sem skip
+- Hidden testado: 96 e 112
+- Gate testado: 4 e 8
+
+**Resultados principais:**
+
+| Modelo | Hidden | Estados | Gate | Skip | Accuracy | FLOPs/amostra | Acc/MFLOP |
+| --- | ---: | ---: | ---: | --- | ---: | ---: | ---: |
+| MLP | 128 | - | - | - | 93.80% | 236.032 | 3.9740 |
+| V4 | 96 | 2 | 8 | não | 93.59% | 185.024 | 5.0583 |
+| V4 | 112 | 2 | 8 | não | 93.08% | 217.344 | 4.2826 |
+
+**Conclusão:** A V4 96/gate 8 ficou abaixo do MLP 128 em FLOPs e relativamente próxima em accuracy (-0.21pp), mas ainda não cruzou o alvo. A V4 112 piorou, indicando que a curva não é monotônica com hidden e que o problema agora provavelmente envolve otimização/roteamento, não apenas largura.
+
+**Próxima direção:** testar mais épocas, learning rate menor, temperatura do gate e registrar entropia/uso dos especialistas por época nas melhores configurações econômicas.

@@ -26,6 +26,7 @@ Variações: hidden 64/128, estados 2/4, gate 8/16, skip on/off
 | Modelo | Hidden | Estados | Gate | Skip | Accuracy | FLOPs/amostra | Params | Acc/MFLOP |
 | --- | ---: | ---: | ---: | --- | ---: | ---: | ---: | ---: |
 | V4 | 128 | 2 | 8 | não | 93.92% | 250.688 | 242.622 | 3.7465 |
+| V4 | 96 | 2 | 8 | não | 93.59% | 185.024 | 177.406 | 5.0583 |
 | V4 | 64 | 2 | 8 | não | 93.31% | 123.456 | 116.286 | 7.5582 |
 | V4 | 64 | 2 | 8 | sim | 93.49% | 232.000 | 170.686 | 4.0297 |
 | V4 | 64 | 4 | 8 | não | 93.22% | 123.520 | 225.122 | 7.5470 |
@@ -67,13 +68,38 @@ Aqui a V4 ficou -0.40pp abaixo e ~12.4% acima em FLOPs. Portanto, ainda não ven
 
 ## Próximo Experimento
 
-Testar configurações ainda mais econômicas:
+O alvo intermediário foi testado:
 
 ```text
 V4 hidden 96
 2 estados
-gate 4 ou 8
+gate 4/8
 sem skip
 ```
 
-O alvo é encontrar um ponto entre V4 64 e V4 128 que aproxime 93.7-93.9% com FLOPs menores que MLP 128 e, idealmente, mais próximos do MLP 64.
+Resultado:
+
+```text
+V4 96 / 2 estados / gate 8 / sem skip
+93.59% accuracy
+185.024 FLOPs/amostra
+```
+
+Esse ponto ficou abaixo do MLP 128 em FLOPs, mas também abaixo em accuracy (-0.21pp). Em seguida, `hidden=112` também foi testado e não melhorou:
+
+```text
+V4 112 / 2 estados / gate 8 / sem skip
+93.08% accuracy
+217.344 FLOPs/amostra
+```
+
+## Próximo Experimento
+
+O comportamento não é monotônico com a largura. A próxima direção deve investigar otimização e roteamento, não apenas aumentar hidden:
+
+```text
+mais épocas para V4 96/128
+learning rate menor
+temperatura do gate
+entropia/uso dos especialistas por época
+```

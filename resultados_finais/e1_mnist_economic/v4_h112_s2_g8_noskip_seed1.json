@@ -1,0 +1,134 @@
+{
+  "experiment": "E1_MNIST",
+  "model_mode": "v4",
+  "seed": 1,
+  "dataset": {
+    "train": 60000,
+    "test": 10000,
+    "input_dim": 784,
+    "classes": 10
+  },
+  "v4_sparse": {
+    "hidden": 112,
+    "states": 2,
+    "gate_hidden": 8,
+    "use_skip": false,
+    "params": 209502,
+    "accuracy": 0.9308,
+    "train_time_sec": 36.30448900000192,
+    "inference_time_sec": 0.1953683000174351,
+    "estimated_sparse_inference_flops_per_sample": 217344,
+    "estimated_dense_executed_flops_per_sample": 418048,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 1.065228687451492,
+        "test_acc": 0.8629
+      },
+      {
+        "epoch": 2,
+        "loss": 0.4162332099453264,
+        "test_acc": 0.9005
+      },
+      {
+        "epoch": 3,
+        "loss": 0.31223003754059764,
+        "test_acc": 0.9167
+      },
+      {
+        "epoch": 4,
+        "loss": 0.2621888573093367,
+        "test_acc": 0.9245
+      },
+      {
+        "epoch": 5,
+        "loss": 0.2303724665475822,
+        "test_acc": 0.9308
+      }
+    ],
+    "gate_usage_l1_by_class": [
+      [
+        3,
+        977
+      ],
+      [
+        0,
+        1135
+      ],
+      [
+        78,
+        954
+      ],
+      [
+        2,
+        1008
+      ],
+      [
+        5,
+        977
+      ],
+      [
+        5,
+        887
+      ],
+      [
+        2,
+        956
+      ],
+      [
+        3,
+        1025
+      ],
+      [
+        0,
+        974
+      ],
+      [
+        2,
+        1007
+      ]
+    ],
+    "gate_usage_l2_by_class": [
+      [
+        135,
+        845
+      ],
+      [
+        3,
+        1132
+      ],
+      [
+        183,
+        849
+      ],
+      [
+        33,
+        977
+      ],
+      [
+        30,
+        952
+      ],
+      [
+        84,
+        808
+      ],
+      [
+        7,
+        951
+      ],
+      [
+        932,
+        96
+      ],
+      [
+        133,
+        841
+      ],
+      [
+        65,
+        944
+      ]
+    ]
+  }
+}

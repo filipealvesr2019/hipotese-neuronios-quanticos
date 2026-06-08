@@ -1,0 +1,134 @@
+{
+  "experiment": "E1_MNIST",
+  "model_mode": "v4",
+  "seed": 1,
+  "dataset": {
+    "train": 60000,
+    "test": 10000,
+    "input_dim": 784,
+    "classes": 10
+  },
+  "v4_sparse": {
+    "hidden": 112,
+    "states": 2,
+    "gate_hidden": 4,
+    "use_skip": false,
+    "params": 205894,
+    "accuracy": 0.9296,
+    "train_time_sec": 35.71059599996079,
+    "inference_time_sec": 0.24300610000500455,
+    "estimated_sparse_inference_flops_per_sample": 210144,
+    "estimated_dense_executed_flops_per_sample": 410848,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.9933668982210215,
+        "test_acc": 0.8724
+      },
+      {
+        "epoch": 2,
+        "loss": 0.3803137298671429,
+        "test_acc": 0.9055
+      },
+      {
+        "epoch": 3,
+        "loss": 0.29044014776293847,
+        "test_acc": 0.9187
+      },
+      {
+        "epoch": 4,
+        "loss": 0.2459334334392484,
+        "test_acc": 0.9244
+      },
+      {
+        "epoch": 5,
+        "loss": 0.21910716836579702,
+        "test_acc": 0.9296
+      }
+    ],
+    "gate_usage_l1_by_class": [
+      [
+        977,
+        3
+      ],
+      [
+        1133,
+        2
+      ],
+      [
+        995,
+        37
+      ],
+      [
+        935,
+        75
+      ],
+      [
+        367,
+        615
+      ],
+      [
+        840,
+        52
+      ],
+      [
+        938,
+        20
+      ],
+      [
+        145,
+        883
+      ],
+      [
+        730,
+        244
+      ],
+      [
+        233,
+        776
+      ]
+    ],
+    "gate_usage_l2_by_class": [
+      [
+        980,
+        0
+      ],
+      [
+        1135,
+        0
+      ],
+      [
+        1032,
+        0
+      ],
+      [
+        1010,
+        0
+      ],
+      [
+        982,
+        0
+      ],
+      [
+        892,
+        0
+      ],
+      [
+        958,
+        0
+      ],
+      [
+        1028,
+        0
+      ],
+      [
+        974,
+        0
+      ],
+      [
+        1009,
+        0
+      ]
+    ]
+  }
+}
