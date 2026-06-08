@@ -1,39 +1,102 @@
 # Research Roadmap — Sparse Routing & Mixture of Experts (V4+)
 
-This document outlines the logical next steps to validate, scale, and apply the sparse routing architecture discovered in Phase 1 (V1-V4).
+This document organizes the next experiments by scientific question. The goal is to avoid random experiments and directly test the revised hypothesis: can compact experts with sparse routing preserve performance while reducing compute?
 
-## Level 1 — Scientific Validation (Confirm it's not a coincidence)
-The goal here is to test the architecture on classic computer vision datasets to ensure it scales to real dimensionalities and learns structured representations.
+## E1 — MNIST
 
-- **E1: MNIST (28x28, 10 classes)**
-  Compare Traditional MLP vs V4 Sparse focusing on: Accuracy, FLOPs, Training time, and Inference time. Goal: Same accuracy, fewer FLOPs.
-  
-- **E2: Fashion-MNIST**
-  Test if experts learn distinct semantic categories (e.g., one expert for shirts, another for shoes) without explicit programming.
+**Question:** Does V4 preserve MLP performance on a real 10-class dataset?
 
-- **E3: CIFAR-10**
-  Strong generalization test on complex RGB images (planes, cats, dogs).
+**Initial matrix:**
 
-## Level 2 — Test the Real Hypothesis (Computational Efficiency)
-Definitively prove the "intelligence per operation" gain.
+| Architecture | Hidden | Seeds |
+| --- | ---: | ---: |
+| MLP | 64 | 10 |
+| MLP | 128 | 10 |
+| MLP | 256 | 10 |
+| V4 Sparse | 64 | 10 |
+| V4 Sparse | 128 | 10 |
+| V4 Sparse | 256 | 10 |
 
-- **E4: Accuracy vs FLOPs Curve**
-  Train dense models of varying widths (64, 128, 256 neurons) and V4 models with varying expert counts (4, 8, 16). The goal is to plot the graph and prove that V4 stays above the traditional curve (More accuracy per FLOP).
-  
-- **E8: Introspective Specialization Analysis**
-  Record *who is used for what*. Discover if E1 focuses on edges, E2 on curves, E3 on noise, etc.
+**Metrics:** accuracy, final loss, training time, inference time, estimated FLOPs, and parameters.
 
-## Level 3 — Approaching LLMs (Transformer Applications)
-Replace the *FeedForward (FFN)* layer of a Transformer with the *V4 Sparse Experts* layer.
+**Status:** started. The first single-seed run showed V4 close to the MLP, but not yet with a meaningful FLOPs reduction.
 
-- **E5: Tiny Transformer (1M to 10M parameters)**
-  Evaluate if perplexity is maintained at a reduced cost.
-  
-- **E6: TinyStories**
-  Train a Dense Transformer vs V4 Transformer on the TinyStories dataset. Evaluate Loss, Perplexity, and Tokens/s.
-  
-- **E7: GPT Mini (e.g., 10M local params)**
-  Replace only the FFN blocks and measure VRAM consumption, inference time, and generative quality.
-  
-- **"Dream" Experiment (The Final Target):**
-  Take a small foundational model (GPT-2 Small, Phi, TinyLlama), replace dense layers with V4 experts, and maintain the same text quality while spending a fraction of the FLOPs.
+## E2 — Accuracy/FLOPs Curve
+
+**Question:** Where does V4 start to be worth it?
+
+Build the `accuracy vs FLOPs` curve and measure `accuracy per MFLOP`. A strong result would look like:
+
+```text
+MLP 128 ≈ V4 64
+same accuracy
+fewer FLOPs
+```
+
+## E3 — Real Specialization
+
+**Question:** Do the experts actually learn different things?
+
+During inference, record class, image, and selected expert. Generate tables and heatmaps by class:
+
+```text
+class 0 -> expert 2
+class 1 -> expert 1
+class 2 -> expert 3
+```
+
+## E4 — Fashion-MNIST
+
+**Question:** Does V4 work beyond digits?
+
+Repeat the MNIST battery on clothing, shoes, and related objects. This separates digit-specific behavior from more semantic visual generalization.
+
+## E5 — State Count Scaling
+
+**Question:** Is there an optimal number of experts?
+
+Test:
+
+```text
+2, 4, 8, 16, 32 states
+```
+
+Record accuracy, FLOPs, expert usage, and entropy. This is one of the most important experiments because it directly tests whether additional states help or only create collapse/waste.
+
+## E6 — Entropy Curve
+
+**Question:** When does expert collapse happen?
+
+Record by epoch:
+
+```text
+layer1 entropy
+layer2 entropy
+traffic distribution per expert
+```
+
+## E7 — Robustness
+
+**Question:** Are experts more robust to noise?
+
+Test MNIST with noise:
+
+```text
+10%, 20%, 30%
+```
+
+Compare degradation between MLP and V4.
+
+## E8 — Transformer Bridge
+
+**Question:** Does the idea survive when the dense layer becomes a Transformer FFN?
+
+Start small:
+
+```text
+Tiny Transformer
+TinyStories
+local GPT mini
+```
+
+Measure loss, perplexity, tokens/s, VRAM, and estimated FLOPs.

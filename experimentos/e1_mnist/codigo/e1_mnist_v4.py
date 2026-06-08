@@ -419,6 +419,7 @@ def find_v4_hidden_under_flops(
 
 def main() -> int:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--model", choices=["both", "dense", "v4"], default="both")
     parser.add_argument("--epochs", type=int, default=5)
     parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--hidden", type=int, default=128)
@@ -447,7 +448,7 @@ def main() -> int:
     print(f"Dataset: train={len(x_train)} test={len(x_test)} input_dim={input_dim}")
 
     dense_target_flops = dense_flops(input_dim, args.hidden, output_dim)
-    if args.v4_hidden <= 0:
+    if args.model in {"both", "v4"} and args.v4_hidden <= 0:
         args.v4_hidden = find_v4_hidden_under_flops(
             dense_target_flops,
             input_dim,
@@ -457,45 +458,27 @@ def main() -> int:
         )
         print(f"V4 hidden auto: {args.v4_hidden} (FLOPs_sparse <= baseline)")
 
-    dense = DenseMLP(input_dim, args.hidden, output_dim, args.seed)
-    v4 = SparseV4MLP(
-        input_dim,
-        args.v4_hidden,
-        output_dim,
-        args.states,
-        args.seed,
-        args.gate_hidden,
-        args.temperature,
-    )
-
-    print(f"\nMLP Tradicional: hidden={args.hidden} params={dense.params()}")
-    print(f"V4 Sparse: hidden={args.v4_hidden} states={args.states} gate_hidden={args.gate_hidden} params={v4.params()}")
-
-    print("\n--- Treino MLP Tradicional ---")
-    dense_history, dense_train_time = train(
-        dense, x_train, y_train, x_test, y_test, args.epochs, args.batch_size, args.lr, args.l2, False
-    )
-    dense_infer_time, dense_pred = time_inference(dense, x_test, args.batch_size)
-    dense_acc = float(np.mean(dense_pred == y_test))
-
-    print("\n--- Treino V4 Sparse ---")
-    v4_history, v4_train_time = train(
-        v4, x_train, y_train, x_test, y_test, args.epochs, args.batch_size, args.lr, args.l2, True
-    )
-    v4_infer_time, v4_pred = time_inference(v4, x_test, args.batch_size)
-    v4_acc = float(np.mean(v4_pred == y_test))
-
-    usage_l1, usage_l2 = v4.gate_usage(x_test, y_test, args.batch_size)
-
-    flops_dense = dense_flops(input_dim, args.hidden, output_dim)
-    flops_v4_sparse = v4_sparse_flops(input_dim, args.v4_hidden, output_dim, args.states, args.gate_hidden)
-    flops_v4_dense = v4_dense_executed_flops(input_dim, args.v4_hidden, output_dim, args.states, args.gate_hidden)
-
     result = {
         "experiment": "E1_MNIST",
+        "model_mode": args.model,
         "seed": args.seed,
         "dataset": {"train": len(x_train), "test": len(x_test), "input_dim": input_dim, "classes": output_dim},
-        "dense": {
+    }
+
+    dense_acc = None
+    v4_acc = None
+    flops_dense = dense_flops(input_dim, args.hidden, output_dim)
+
+    if args.model in {"both", "dense"}:
+        dense = DenseMLP(input_dim, args.hidden, output_dim, args.seed)
+        print(f"\nMLP Tradicional: hidden={args.hidden} params={dense.params()}")
+        print("\n--- Treino MLP Tradicional ---")
+        dense_history, dense_train_time = train(
+            dense, x_train, y_train, x_test, y_test, args.epochs, args.batch_size, args.lr, args.l2, False
+        )
+        dense_infer_time, dense_pred = time_inference(dense, x_test, args.batch_size)
+        dense_acc = float(np.mean(dense_pred == y_test))
+        result["dense"] = {
             "hidden": args.hidden,
             "params": dense.params(),
             "accuracy": dense_acc,
@@ -503,8 +486,31 @@ def main() -> int:
             "inference_time_sec": dense_infer_time,
             "estimated_inference_flops_per_sample": flops_dense,
             "history": dense_history,
-        },
-        "v4_sparse": {
+        }
+
+    if args.model in {"both", "v4"}:
+        v4 = SparseV4MLP(
+            input_dim,
+            args.v4_hidden,
+            output_dim,
+            args.states,
+            args.seed,
+            args.gate_hidden,
+            args.temperature,
+        )
+        print(f"\nV4 Sparse: hidden={args.v4_hidden} states={args.states} gate_hidden={args.gate_hidden} params={v4.params()}")
+        print("\n--- Treino V4 Sparse ---")
+        v4_history, v4_train_time = train(
+            v4, x_train, y_train, x_test, y_test, args.epochs, args.batch_size, args.lr, args.l2, True
+        )
+        v4_infer_time, v4_pred = time_inference(v4, x_test, args.batch_size)
+        v4_acc = float(np.mean(v4_pred == y_test))
+        usage_l1, usage_l2 = v4.gate_usage(x_test, y_test, args.batch_size)
+
+        flops_v4_sparse = v4_sparse_flops(input_dim, args.v4_hidden, output_dim, args.states, args.gate_hidden)
+        flops_v4_dense = v4_dense_executed_flops(input_dim, args.v4_hidden, output_dim, args.states, args.gate_hidden)
+
+        result["v4_sparse"] = {
             "hidden": args.v4_hidden,
             "states": args.states,
             "gate_hidden": args.gate_hidden,
@@ -517,21 +523,26 @@ def main() -> int:
             "history": v4_history,
             "gate_usage_l1_by_class": usage_l1.tolist(),
             "gate_usage_l2_by_class": usage_l2.tolist(),
-        },
-    }
+        }
 
     RESULT_DIR.mkdir(parents=True, exist_ok=True)
     out_path = RESULT_DIR / args.out
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(result, f, indent=2)
 
     print("\n--- Resultado Final ---")
-    print(f"MLP Tradicional: acc={dense_acc*100:.2f}% train={dense_train_time:.2f}s infer={dense_infer_time:.4f}s FLOPs={flops_dense}")
-    print(
-        "V4 Sparse:       "
-        f"acc={v4_acc*100:.2f}% train={v4_train_time:.2f}s infer={v4_infer_time:.4f}s "
-        f"FLOPs_sparse={flops_v4_sparse} FLOPs_dense_impl={flops_v4_dense}"
-    )
+    if "dense" in result:
+        d = result["dense"]
+        print(f"MLP Tradicional: acc={dense_acc*100:.2f}% train={d['train_time_sec']:.2f}s infer={d['inference_time_sec']:.4f}s FLOPs={flops_dense}")
+    if "v4_sparse" in result:
+        v = result["v4_sparse"]
+        print(
+            "V4 Sparse:       "
+            f"acc={v4_acc*100:.2f}% train={v['train_time_sec']:.2f}s infer={v['inference_time_sec']:.4f}s "
+            f"FLOPs_sparse={v['estimated_sparse_inference_flops_per_sample']} "
+            f"FLOPs_dense_impl={v['estimated_dense_executed_flops_per_sample']}"
+        )
     print(f"Resultado salvo em: {out_path}")
     return 0
 
