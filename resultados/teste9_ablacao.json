@@ -1,0 +1,137 @@
+{
+  "1": [
+    {
+      "seed": 1,
+      "ms_acc": 86.0,
+      "ms_params": 1220
+    },
+    {
+      "seed": 2,
+      "ms_acc": 89.5,
+      "ms_params": 1220
+    },
+    {
+      "seed": 3,
+      "ms_acc": 82.5,
+      "ms_params": 1220
+    },
+    {
+      "seed": 4,
+      "ms_acc": 88.0,
+      "ms_params": 1220
+    },
+    {
+      "seed": 5,
+      "ms_acc": 89.0,
+      "ms_params": 1220
+    }
+  ],
+  "2": [
+    {
+      "seed": 1,
+      "ms_acc": 75.0,
+      "ms_params": 1194
+    },
+    {
+      "seed": 2,
+      "ms_acc": 69.5,
+      "ms_params": 1194
+    },
+    {
+      "seed": 3,
+      "ms_acc": 83.5,
+      "ms_params": 1194
+    },
+    {
+      "seed": 4,
+      "ms_acc": 47.5,
+      "ms_params": 1194
+    },
+    {
+      "seed": 5,
+      "ms_acc": 52.0,
+      "ms_params": 1194
+    }
+  ],
+  "4": [
+    {
+      "seed": 1,
+      "ms_acc": 61.0,
+      "ms_params": 1180
+    },
+    {
+      "seed": 2,
+      "ms_acc": 49.0,
+      "ms_params": 1180
+    },
+    {
+      "seed": 3,
+      "ms_acc": 59.5,
+      "ms_params": 1180
+    },
+    {
+      "seed": 4,
+      "ms_acc": 47.5,
+      "ms_params": 1180
+    },
+    {
+      "seed": 5,
+      "ms_acc": 53.0,
+      "ms_params": 1180
+    }
+  ],
+  "8": [
+    {
+      "seed": 1,
+      "ms_acc": 52.5,
+      "ms_params": 1158
+    },
+    {
+      "seed": 2,
+      "ms_acc": 49.0,
+      "ms_params": 1158
+    },
+    {
+      "seed": 3,
+      "ms_acc": 51.0,
+      "ms_params": 1158
+    },
+    {
+      "seed": 4,
+      "ms_acc": 47.5,
+      "ms_params": 1158
+    },
+    {
+      "seed": 5,
+      "ms_acc": 71.5,
+      "ms_params": 1158
+    }
+  ],
+  "16": [
+    {
+      "seed": 1,
+      "ms_acc": 61.0,
+      "ms_params": 1280
+    },
+    {
+      "seed": 2,
+      "ms_acc": 49.0,
+      "ms_params": 1280
+    },
+    {
+      "seed": 3,
+      "ms_acc": 49.5,
+      "ms_params": 1280
+    },
+    {
+      "seed": 4,
+      "ms_acc": 47.5,
+      "ms_params": 1280
+    },
+    {
+      "seed": 5,
+      "ms_acc": 48.0,
+      "ms_params": 1280
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "seed": 1,
+    "trad_acc": 94.0,
+    "ms_acc": 75.5,
+    "trad_params": 41202,
+    "ms_params": 20870,
+    "eficiencia": 80.32
+  },
+  {
+    "seed": 2,
+    "trad_acc": 93.0,
+    "ms_acc": 92.0,
+    "trad_params": 41202,
+    "ms_params": 20870,
+    "eficiencia": 98.92
+  },
+  {
+    "seed": 3,
+    "trad_acc": 92.0,
+    "ms_acc": 85.5,
+    "trad_params": 41202,
+    "ms_params": 20870,
+    "eficiencia": 92.93
+  },
+  {
+    "seed": 4,
+    "trad_acc": 97.5,
+    "ms_acc": 76.5,
+    "trad_params": 41202,
+    "ms_params": 20870,
+    "eficiencia": 78.46
+  },
+  {
+    "seed": 5,
+    "trad_acc": 96.0,
+    "ms_acc": 85.5,
+    "trad_params": 41202,
+    "ms_params": 20870,
+    "eficiencia": 89.06
+  }
+]

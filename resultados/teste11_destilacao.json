@@ -1,0 +1,47 @@
+[
+  {
+    "seed": 1,
+    "trad_distill": 65.0,
+    "ms_distill": 61.0,
+    "trad_gt": 84.0,
+    "ms_gt": 49.5,
+    "trad_params": 354,
+    "ms_params": 332
+  },
+  {
+    "seed": 2,
+    "trad_distill": 49.0,
+    "ms_distill": 49.0,
+    "trad_gt": 83.5,
+    "ms_gt": 49.0,
+    "trad_params": 354,
+    "ms_params": 332
+  },
+  {
+    "seed": 3,
+    "trad_distill": 49.5,
+    "ms_distill": 49.5,
+    "trad_gt": 65.5,
+    "ms_gt": 66.5,
+    "trad_params": 354,
+    "ms_params": 332
+  },
+  {
+    "seed": 4,
+    "trad_distill": 47.5,
+    "ms_distill": 47.5,
+    "trad_gt": 67.5,
+    "ms_gt": 47.5,
+    "trad_params": 354,
+    "ms_params": 332
+  },
+  {
+    "seed": 5,
+    "trad_distill": 71.5,
+    "ms_distill": 59.0,
+    "trad_gt": 91.0,
+    "ms_gt": 78.5,
+    "trad_params": 354,
+    "ms_params": 332
+  }
+]

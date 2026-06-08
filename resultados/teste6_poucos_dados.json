@@ -1,0 +1,150 @@
+{
+  "100%": [
+    {
+      "seed": 1,
+      "trad_acc": 89.0,
+      "ms_acc": 65.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 2,
+      "trad_acc": 90.0,
+      "ms_acc": 49.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 3,
+      "trad_acc": 87.5,
+      "ms_acc": 69.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 4,
+      "trad_acc": 89.0,
+      "ms_acc": 47.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 5,
+      "trad_acc": 85.5,
+      "ms_acc": 53.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    }
+  ],
+  "50%": [
+    {
+      "seed": 1,
+      "trad_acc": 83.0,
+      "ms_acc": 50.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 2,
+      "trad_acc": 67.5,
+      "ms_acc": 51.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 3,
+      "trad_acc": 91.0,
+      "ms_acc": 57.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 4,
+      "trad_acc": 47.5,
+      "ms_acc": 47.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 5,
+      "trad_acc": 61.5,
+      "ms_acc": 52.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    }
+  ],
+  "25%": [
+    {
+      "seed": 1,
+      "trad_acc": 55.0,
+      "ms_acc": 49.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 2,
+      "trad_acc": 68.5,
+      "ms_acc": 51.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 3,
+      "trad_acc": 77.0,
+      "ms_acc": 50.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 4,
+      "trad_acc": 47.5,
+      "ms_acc": 47.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 5,
+      "trad_acc": 54.5,
+      "ms_acc": 56.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    }
+  ],
+  "10%": [
+    {
+      "seed": 1,
+      "trad_acc": 63.0,
+      "ms_acc": 54.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 2,
+      "trad_acc": 63.5,
+      "ms_acc": 51.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 3,
+      "trad_acc": 79.0,
+      "ms_acc": 54.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 4,
+      "trad_acc": 47.5,
+      "ms_acc": 47.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 5,
+      "trad_acc": 50.5,
+      "ms_acc": 52.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    }
+  ]
+}

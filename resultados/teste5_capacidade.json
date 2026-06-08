@@ -1,0 +1,37 @@
+[
+  {
+    "seed": 1,
+    "trad_acc": 94.0,
+    "ms_acc": 87.0,
+    "trad_params": 41202,
+    "ms_params": 40996
+  },
+  {
+    "seed": 2,
+    "trad_acc": 93.0,
+    "ms_acc": 90.0,
+    "trad_params": 41202,
+    "ms_params": 40996
+  },
+  {
+    "seed": 3,
+    "trad_acc": 92.0,
+    "ms_acc": 82.0,
+    "trad_params": 41202,
+    "ms_params": 40996
+  },
+  {
+    "seed": 4,
+    "trad_acc": 97.5,
+    "ms_acc": 84.5,
+    "trad_params": 41202,
+    "ms_params": 40996
+  },
+  {
+    "seed": 5,
+    "trad_acc": 96.0,
+    "ms_acc": 80.5,
+    "trad_params": 41202,
+    "ms_params": 40996
+  }
+]

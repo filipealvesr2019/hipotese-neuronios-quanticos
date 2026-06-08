@@ -1,0 +1,113 @@
+{
+  "circulos": [
+    {
+      "seed": 1,
+      "trad_acc": 89.5,
+      "ms_acc": 60.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 2,
+      "trad_acc": 90.0,
+      "ms_acc": 51.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 3,
+      "trad_acc": 88.0,
+      "ms_acc": 74.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 4,
+      "trad_acc": 89.0,
+      "ms_acc": 47.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 5,
+      "trad_acc": 85.0,
+      "ms_acc": 54.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    }
+  ],
+  "espirais": [
+    {
+      "seed": 1,
+      "trad_acc": 55.5,
+      "ms_acc": 52.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 2,
+      "trad_acc": 66.5,
+      "ms_acc": 54.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 3,
+      "trad_acc": 61.5,
+      "ms_acc": 48.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 4,
+      "trad_acc": 57.0,
+      "ms_acc": 46.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 5,
+      "trad_acc": 61.0,
+      "ms_acc": 50.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    }
+  ],
+  "luas": [
+    {
+      "seed": 1,
+      "trad_acc": 99.0,
+      "ms_acc": 84.0,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 2,
+      "trad_acc": 99.5,
+      "ms_acc": 86.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 3,
+      "trad_acc": 99.5,
+      "ms_acc": 48.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 4,
+      "trad_acc": 98.5,
+      "ms_acc": 46.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    },
+    {
+      "seed": 5,
+      "trad_acc": 99.0,
+      "ms_acc": 62.5,
+      "trad_params": 1218,
+      "ms_params": 1180
+    }
+  ]
+}

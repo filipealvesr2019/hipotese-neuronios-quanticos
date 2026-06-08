@@ -1,0 +1,52 @@
+[
+  {
+    "seed": 1,
+    "trad_acc": 89.5,
+    "ms_acc": 60.0,
+    "trad_params": 1218,
+    "ms_params": 1180,
+    "trad_info": 7.3481,
+    "ms_info": 5.0847,
+    "ratio": 0.692
+  },
+  {
+    "seed": 2,
+    "trad_acc": 90.0,
+    "ms_acc": 51.0,
+    "trad_params": 1218,
+    "ms_params": 1180,
+    "trad_info": 7.3892,
+    "ms_info": 4.322,
+    "ratio": 0.5849
+  },
+  {
+    "seed": 3,
+    "trad_acc": 88.0,
+    "ms_acc": 74.0,
+    "trad_params": 1218,
+    "ms_params": 1180,
+    "trad_info": 7.225,
+    "ms_info": 6.2712,
+    "ratio": 0.868
+  },
+  {
+    "seed": 4,
+    "trad_acc": 89.0,
+    "ms_acc": 47.5,
+    "trad_params": 1218,
+    "ms_params": 1180,
+    "trad_info": 7.3071,
+    "ms_info": 4.0254,
+    "ratio": 0.5509
+  },
+  {
+    "seed": 5,
+    "trad_acc": 85.0,
+    "ms_acc": 54.0,
+    "trad_params": 1218,
+    "ms_params": 1180,
+    "trad_info": 6.9787,
+    "ms_info": 4.5763,
+    "ratio": 0.6558
+  }
+]

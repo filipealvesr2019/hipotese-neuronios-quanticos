@@ -1,0 +1,37 @@
+[
+  {
+    "seed": 1,
+    "trad_acc": 100.0,
+    "ms_acc": 75.0,
+    "trad_params": 114,
+    "ms_params": 100
+  },
+  {
+    "seed": 2,
+    "trad_acc": 100.0,
+    "ms_acc": 50.0,
+    "trad_params": 114,
+    "ms_params": 100
+  },
+  {
+    "seed": 3,
+    "trad_acc": 75.0,
+    "ms_acc": 75.0,
+    "trad_params": 114,
+    "ms_params": 100
+  },
+  {
+    "seed": 4,
+    "trad_acc": 100.0,
+    "ms_acc": 50.0,
+    "trad_params": 114,
+    "ms_params": 100
+  },
+  {
+    "seed": 5,
+    "trad_acc": 100.0,
+    "ms_acc": 50.0,
+    "trad_params": 114,
+    "ms_params": 100
+  }
+]
