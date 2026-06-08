@@ -106,3 +106,4 @@ python experimentos/consolidate_mnist_economic.py
 ---
 
 
+Checklist de Validação da Arquitetura
