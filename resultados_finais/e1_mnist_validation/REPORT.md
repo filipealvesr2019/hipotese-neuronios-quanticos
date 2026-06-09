@@ -49,17 +49,25 @@
 
 | Estados | Acc | L1_H | L2_H | Params | FLOPs sparse | FLOPs dense | Treino (s) |
 |---------|-----|------|------|--------|-------------|-------------|-----------|
-| s=2 | 95.23% | 0.087 | 0.011 | 242622 | 250688 | 484160 | 73.0 |
-| s=4 | 94.30% | 0.025 | 0.591 | 476642 | 250752 | 951168 | 120.2 |
-| s=8 | 93.66% | 0.486 | 0.081 | 944682 | 250880 | 1885184 | 227.5 |
+| s=2 | 95.23% | 0.087 (colapso) | 0.011 (colapso) | 242622 | 250688 | 484160 | 73.0 |
+| s=4 | 94.30% | 0.025 (colapso) | **0.591** (distribuído) | 476642 | 250752 | 951168 | 120.2 |
+| s=8 | 93.66% | **0.486** (moderado) | 0.081 (colapso) | 944682 | 250880 | 1885184 | 227.5 |
+| s=16 | **93.34%** | 0.350 (moderado) | 0.336 (moderado) | 1.88M | 251136 | 3.75M | 558 |
 | MLP (ref) | 94.97% | — | — | 118282 | — | 236032 | — |
 
-### Uso por classe (s=8, L1)
+**Padrão:** As camadas alternam colapso com s=4 e s=8. Apenas com s=16 ambas mantêm entropia moderada, mas accuracy é a pior.
 
-Maior especializacao observada em L1 com 8 estados:
-- Expert 3 domina: classes 0, 1, 3, 5, 6, 7, 9
-- Expert 4 domina: classes 2, 4, 8
-- Porem L2 colapsou para expert 2 em 99-100% das classes
+### Uso por classe (s=16, L1)
+
+- Expert 4 domina: classes 1, 2, 3, 5, 6, 8
+- Expert 12 domina: classes 0, 4, 7, 9
+
+### Uso por classe (s=16, L2)
+
+- Expert 8 domina: classes 1, 2, 3, 5, 6, 8
+- Expert 14 domina: classes 4, 7, 9
+- Expert 10 lidera: classe 0 (47%)
+- Pela primeira vez, ambas as camadas distribuem simultaneamente, mas accuracy não melhora
 
 ## 4. Analise de Custo-Beneficio
 
@@ -68,6 +76,7 @@ Maior especializacao observada em L1 com 8 estados:
 | s=2 | 95.23% | +0.00pp | 242622 | 250688 |
 | s=4 | 94.30% | -0.01pp | 476642 | 250752 |
 | s=8 | 93.66% | -0.01pp | 944682 | 250880 |
+| s=16 | 93.34% | -0.02pp | 1.88M | 251136 |
 | MLP (ref) | 94.97% | baseline | 118282 | 236032 |
 
 ## 5. Conclusoes
@@ -76,6 +85,7 @@ Maior especializacao observada em L1 com 8 estados:
 2. **Temperatura nao controla colapso** — regime de entropia e determinado pela seed
 3. **Seeds com colapso tem accuracy MELHOR** que seeds com entropia alta
 4. **Camadas alternam colapso** — nunca ambas distribuem simultaneamente
-5. **Mais estados piora accuracy** (s=2: 95.23%, s=4: 94.30%, s=8: 93.66%)
-6. **Especializacao real existe** (s=8 L1: experts 3 e 4 dividem classes) mas nao melhora accuracy
+5. **Mais estados piora accuracy** (s=2: 95.23%, s=4: 94.30%, s=8: 93.66%, s=16: 93.34%)
+6. **Especializacao real existe** (s=8 L1: experts 3 e 4; s=16 L1: experts 4 e 12; L2: experts 8 e 14) mas nao melhora accuracy
 7. **Problema e arquitetura, nao roteamento** — V4 tem limitacao fundamental no fluxo de gradiente via top-1 hard selection
+8. **Camadas alternam colapso ate s=16**, quando finalmente ambas distribuem, mas com pior accuracy — o gate distribui a forca, nao por necessidade
