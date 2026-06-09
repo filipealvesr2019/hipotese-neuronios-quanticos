@@ -1,0 +1,429 @@
+{
+  "experiment": "E1_MNIST",
+  "model_mode": "v4",
+  "seed": 3,
+  "dataset": {
+    "train": 60000,
+    "test": 10000,
+    "input_dim": 784,
+    "classes": 10
+  },
+  "v4_sparse": {
+    "hidden": 128,
+    "states": 2,
+    "gate_hidden": 8,
+    "use_skip": false,
+    "params": 242622,
+    "accuracy": 0.9511,
+    "train_time_sec": 71.44459069997538,
+    "inference_time_sec": 0.1824851999990642,
+    "estimated_sparse_inference_flops_per_sample": 250688,
+    "estimated_dense_executed_flops_per_sample": 484160,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.8064644997875821,
+        "test_acc": 0.8902,
+        "gate_stats": {
+          "samples": 10000,
+          "layer1": {
+            "counts": [
+              23,
+              9977
+            ],
+            "distribution": [
+              0.0023,
+              0.9977
+            ],
+            "entropy": 0.0234719257107799,
+            "normalized_entropy": 0.0234719257107799
+          },
+          "layer2": {
+            "counts": [
+              19,
+              9981
+            ],
+            "distribution": [
+              0.0019,
+              0.9981
+            ],
+            "entropy": 0.019914106107931935,
+            "normalized_entropy": 0.019914106107931935
+          }
+        }
+      },
+      {
+        "epoch": 2,
+        "loss": 0.3298428935997422,
+        "test_acc": 0.9172,
+        "gate_stats": {
+          "samples": 10000,
+          "layer1": {
+            "counts": [
+              16,
+              9984
+            ],
+            "distribution": [
+              0.0016,
+              0.9984
+            ],
+            "entropy": 0.017166804237380713,
+            "normalized_entropy": 0.017166804237380713
+          },
+          "layer2": {
+            "counts": [
+              12,
+              9988
+            ],
+            "distribution": [
+              0.0012,
+              0.9988
+            ],
+            "entropy": 0.013373494747485587,
+            "normalized_entropy": 0.013373494747485587
+          }
+        }
+      },
+      {
+        "epoch": 3,
+        "loss": 0.2568798273293179,
+        "test_acc": 0.9274,
+        "gate_stats": {
+          "samples": 10000,
+          "layer1": {
+            "counts": [
+              13,
+              9987
+            ],
+            "distribution": [
+              0.0013,
+              0.9987
+            ],
+            "entropy": 0.014337738407066444,
+            "normalized_entropy": 0.014337738407066444
+          },
+          "layer2": {
+            "counts": [
+              11,
+              9989
+            ],
+            "distribution": [
+              0.0011,
+              0.9989
+            ],
+            "entropy": 0.012397200231267488,
+            "normalized_entropy": 0.012397200231267488
+          }
+        }
+      },
+      {
+        "epoch": 4,
+        "loss": 0.21938349925198036,
+        "test_acc": 0.9335,
+        "gate_stats": {
+          "samples": 10000,
+          "layer1": {
+            "counts": [
+              11,
+              9989
+            ],
+            "distribution": [
+              0.0011,
+              0.9989
+            ],
+            "entropy": 0.012397200231267488,
+            "normalized_entropy": 0.012397200231267488
+          },
+          "layer2": {
+            "counts": [
+              9,
+              9991
+            ],
+            "distribution": [
+              0.0009,
+              0.9991
+            ],
+            "entropy": 0.010403849710238578,
+            "normalized_entropy": 0.010403849710238578
+          }
+        }
+      },
+      {
+        "epoch": 5,
+        "loss": 0.19500511326071038,
+        "test_acc": 0.9377,
+        "gate_stats": {
+          "samples": 10000,
+          "layer1": {
+            "counts": [
+              12,
+              9988
+            ],
+            "distribution": [
+              0.0012,
+              0.9988
+            ],
+            "entropy": 0.013373494747485587,
+            "normalized_entropy": 0.013373494747485587
+          },
+          "layer2": {
+            "counts": [
+              8,
+              9992
+            ],
+            "distribution": [
+              0.0008,
+              0.9992
+            ],
+            "entropy": 0.009383864150778434,
+            "normalized_entropy": 0.009383864150778434
+          }
+        }
+      },
+      {
+        "epoch": 6,
+        "loss": 0.17752947374728975,
+        "test_acc": 0.9418,
+        "gate_stats": {
+          "samples": 10000,
+          "layer1": {
+            "counts": [
+              12,
+              9988
+            ],
+            "distribution": [
+              0.0012,
+              0.9988
+            ],
+            "entropy": 0.013373494747485587,
+            "normalized_entropy": 0.013373494747485587
+          },
+          "layer2": {
+            "counts": [
+              6,
+              9994
+            ],
+            "distribution": [
+              0.0006,
+              0.9994
+            ],
+            "entropy": 0.0072870072147704495,
+            "normalized_entropy": 0.0072870072147704495
+          }
+        }
+      },
+      {
+        "epoch": 7,
+        "loss": 0.1641688602120124,
+        "test_acc": 0.9445,
+        "gate_stats": {
+          "samples": 10000,
+          "layer1": {
+            "counts": [
+              12,
+              9988
+            ],
+            "distribution": [
+              0.0012,
+              0.9988
+            ],
+            "entropy": 0.013373494747485587,
+            "normalized_entropy": 0.013373494747485587
+          },
+          "layer2": {
+            "counts": [
+              3,
+              9997
+            ],
+            "distribution": [
+              0.0003,
+              0.9997
+            ],
+            "entropy": 0.003943568548145187,
+            "normalized_entropy": 0.003943568548145187
+          }
+        }
+      },
+      {
+        "epoch": 8,
+        "loss": 0.15364163170682701,
+        "test_acc": 0.9475,
+        "gate_stats": {
+          "samples": 10000,
+          "layer1": {
+            "counts": [
+              11,
+              9989
+            ],
+            "distribution": [
+              0.0011,
+              0.9989
+            ],
+            "entropy": 0.012397200231267488,
+            "normalized_entropy": 0.012397200231267488
+          },
+          "layer2": {
+            "counts": [
+              3,
+              9997
+            ],
+            "distribution": [
+              0.0003,
+              0.9997
+            ],
+            "entropy": 0.003943568548145187,
+            "normalized_entropy": 0.003943568548145187
+          }
+        }
+      },
+      {
+        "epoch": 9,
+        "loss": 0.14409402006527755,
+        "test_acc": 0.9492,
+        "gate_stats": {
+          "samples": 10000,
+          "layer1": {
+            "counts": [
+              10,
+              9990
+            ],
+            "distribution": [
+              0.001,
+              0.999
+            ],
+            "entropy": 0.011407757737461138,
+            "normalized_entropy": 0.011407757737461138
+          },
+          "layer2": {
+            "counts": [
+              3,
+              9997
+            ],
+            "distribution": [
+              0.0003,
+              0.9997
+            ],
+            "entropy": 0.003943568548145187,
+            "normalized_entropy": 0.003943568548145187
+          }
+        }
+      },
+      {
+        "epoch": 10,
+        "loss": 0.13631302024594408,
+        "test_acc": 0.9511,
+        "gate_stats": {
+          "samples": 10000,
+          "layer1": {
+            "counts": [
+              11,
+              9989
+            ],
+            "distribution": [
+              0.0011,
+              0.9989
+            ],
+            "entropy": 0.012397200231267488,
+            "normalized_entropy": 0.012397200231267488
+          },
+          "layer2": {
+            "counts": [
+              3,
+              9997
+            ],
+            "distribution": [
+              0.0003,
+              0.9997
+            ],
+            "entropy": 0.003943568548145187,
+            "normalized_entropy": 0.003943568548145187
+          }
+        }
+      }
+    ],
+    "gate_usage_l1_by_class": [
+      [
+        0,
+        980
+      ],
+      [
+        0,
+        1135
+      ],
+      [
+        5,
+        1027
+      ],
+      [
+        0,
+        1010
+      ],
+      [
+        1,
+        981
+      ],
+      [
+        0,
+        892
+      ],
+      [
+        0,
+        958
+      ],
+      [
+        3,
+        1025
+      ],
+      [
+        2,
+        972
+      ],
+      [
+        0,
+        1009
+      ]
+    ],
+    "gate_usage_l2_by_class": [
+      [
+        0,
+        980
+      ],
+      [
+        0,
+        1135
+      ],
+      [
+        3,
+        1029
+      ],
+      [
+        0,
+        1010
+      ],
+      [
+        0,
+        982
+      ],
+      [
+        0,
+        892
+      ],
+      [
+        0,
+        958
+      ],
+      [
+        0,
+        1028
+      ],
+      [
+        0,
+        974
+      ],
+      [
+        0,
+        1009
+      ]
+    ]
+  }
+}

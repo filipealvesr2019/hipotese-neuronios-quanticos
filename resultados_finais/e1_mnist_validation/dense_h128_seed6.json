@@ -1,0 +1,71 @@
+{
+  "experiment": "E1_MNIST",
+  "model_mode": "dense",
+  "seed": 6,
+  "dataset": {
+    "train": 60000,
+    "test": 10000,
+    "input_dim": 784,
+    "classes": 10
+  },
+  "dense": {
+    "hidden": 128,
+    "params": 118282,
+    "accuracy": 0.9484,
+    "train_time_sec": 29.688729499990586,
+    "inference_time_sec": 0.0972563000395894,
+    "estimated_inference_flops_per_sample": 236032,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.7751652456506798,
+        "test_acc": 0.8926
+      },
+      {
+        "epoch": 2,
+        "loss": 0.3269229144128175,
+        "test_acc": 0.9171
+      },
+      {
+        "epoch": 3,
+        "loss": 0.2584779928403155,
+        "test_acc": 0.9267
+      },
+      {
+        "epoch": 4,
+        "loss": 0.222837774815522,
+        "test_acc": 0.9326
+      },
+      {
+        "epoch": 5,
+        "loss": 0.19923475453756198,
+        "test_acc": 0.9367
+      },
+      {
+        "epoch": 6,
+        "loss": 0.18196895797248253,
+        "test_acc": 0.94
+      },
+      {
+        "epoch": 7,
+        "loss": 0.16844408790639787,
+        "test_acc": 0.9423
+      },
+      {
+        "epoch": 8,
+        "loss": 0.15732287525913147,
+        "test_acc": 0.9442
+      },
+      {
+        "epoch": 9,
+        "loss": 0.14806832368745054,
+        "test_acc": 0.9474
+      },
+      {
+        "epoch": 10,
+        "loss": 0.14023398514988353,
+        "test_acc": 0.9484
+      }
+    ]
+  }
+}

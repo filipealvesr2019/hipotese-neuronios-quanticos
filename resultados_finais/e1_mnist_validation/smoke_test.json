@@ -1,0 +1,156 @@
+{
+  "experiment": "E1_MNIST",
+  "model_mode": "both",
+  "seed": 1,
+  "dataset": {
+    "train": 60000,
+    "test": 10000,
+    "input_dim": 784,
+    "classes": 10
+  },
+  "dense": {
+    "hidden": 128,
+    "params": 118282,
+    "accuracy": 0.8902,
+    "train_time_sec": 2.767994499998167,
+    "inference_time_sec": 0.09094480000203475,
+    "estimated_inference_flops_per_sample": 236032,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.7912126494221715,
+        "test_acc": 0.8902
+      }
+    ]
+  },
+  "v4_sparse": {
+    "hidden": 128,
+    "states": 2,
+    "gate_hidden": 8,
+    "use_skip": true,
+    "params": 359614,
+    "accuracy": 0.8906,
+    "train_time_sec": 9.871727199992165,
+    "inference_time_sec": 0.29593239998212084,
+    "estimated_sparse_inference_flops_per_sample": 484160,
+    "estimated_dense_executed_flops_per_sample": 717632,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.759333963680492,
+        "test_acc": 0.8906,
+        "gate_stats": {
+          "samples": 10000,
+          "layer1": {
+            "counts": [
+              2415,
+              7585
+            ],
+            "distribution": [
+              0.2415,
+              0.7585
+            ],
+            "entropy": 0.797525841340873,
+            "normalized_entropy": 0.797525841340873
+          },
+          "layer2": {
+            "counts": [
+              7383,
+              2617
+            ],
+            "distribution": [
+              0.7383,
+              0.2617
+            ],
+            "entropy": 0.8293008757422897,
+            "normalized_entropy": 0.8293008757422897
+          }
+        }
+      }
+    ],
+    "gate_usage_l1_by_class": [
+      [
+        73,
+        907
+      ],
+      [
+        83,
+        1052
+      ],
+      [
+        487,
+        545
+      ],
+      [
+        171,
+        839
+      ],
+      [
+        417,
+        565
+      ],
+      [
+        58,
+        834
+      ],
+      [
+        199,
+        759
+      ],
+      [
+        460,
+        568
+      ],
+      [
+        89,
+        885
+      ],
+      [
+        378,
+        631
+      ]
+    ],
+    "gate_usage_l2_by_class": [
+      [
+        812,
+        168
+      ],
+      [
+        593,
+        542
+      ],
+      [
+        793,
+        239
+      ],
+      [
+        729,
+        281
+      ],
+      [
+        845,
+        137
+      ],
+      [
+        705,
+        187
+      ],
+      [
+        562,
+        396
+      ],
+      [
+        596,
+        432
+      ],
+      [
+        830,
+        144
+      ],
+      [
+        918,
+        91
+      ]
+    ]
+  }
+}
