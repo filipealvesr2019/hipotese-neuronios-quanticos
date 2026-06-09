@@ -75,3 +75,4 @@ Rigorous stress tests across 30 seeds demonstrated a **technical tie** in accura
 7. **At equal parameters, V4 ties MLP** — the gain is efficiency (half the FLOPs), not accuracy
 
 Full report: [`docs/en-US/REPORT_V4_MNIST.md`](docs/en-US/REPORT_V4_MNIST.md)
+Roadmap: [`docs/en-US/ROADMAP.md`](docs/en-US/ROADMAP.md)

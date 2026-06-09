@@ -1,138 +1,122 @@
 # Roadmap de Pesquisa — Roteamento Esparso e Mistura de Especialistas (V4+)
 
-Este documento organiza os próximos experimentos por pergunta científica. A meta é evitar testes aleatórios e medir diretamente a hipótese revisada: especialistas compactos com roteamento esparso podem manter desempenho reduzindo computação?
+*Atualizado em: 2026-06-08 — após validação MNIST 10 seeds + escala de estados*
 
-## E1 — MNIST
+---
 
-**Pergunta:** A V4 mantém a performance do MLP em um dataset real de 10 classes?
+## Estado Atual (resumo executivo)
 
-**Matriz inicial:**
+**V4 s=2/g=8/no-skip vs MLP 128 — 10 seeds MNIST:**
 
-| Arquitetura | Hidden | Seeds |
-| --- | ---: | ---: |
-| MLP | 64 | 10 |
-| MLP | 128 | 10 |
-| MLP | 256 | 10 |
-| V4 Sparse | 64 | 10 |
-| V4 Sparse | 128 | 10 |
-| V4 Sparse | 256 | 10 |
+| Métrica | MLP 128 | MLP 235 (242k params) | V4 s=2 (242k params) |
+|---------|---------|-----------------------|----------------------|
+| Média   | 95.05%  | **95.19%**            | 94.78%               |
+| Std     | ±0.15%  | ±0.10%                | ±0.36%               |
+| FLOPs   | 236k    | 483k                  | **250k**             |
+| Acc/MFLOP | 4.03  | 1.97                   | **3.79**             |
 
-**Métricas:** accuracy, loss final, tempo de treino, tempo de inferência, FLOPs estimados e parâmetros.
+**Descobertas-chave já validadas:**
 
-**Status:** iniciado. O primeiro single seed mostrou V4 próxima do MLP, mas ainda sem redução expressiva de FLOPs.
+1. **V4 não supera MLP em accuracy** (−0.28pp vs MLP 128, −0.41pp vs MLP 235)
+2. **Mas é 48% mais eficiente em FLOPs** que MLP de mesmo tamanho
+3. **Temperatura não controla colapso** — regime de entropia é definido pela seed
+4. **Seeds com colapso têm accuracy MELHOR** que seeds com entropia alta
+5. **Mais estados piora accuracy** (s=2: 95.23% → s=16: 93.34%)
+6. **Especialização real existe mas não melhora resultado**
+7. **O problema é arquitetura, não roteamento** — limitação fundamental no top-1
 
-## E2 — Curva Accuracy/FLOPs
+---
 
-**Pergunta:** Onde a V4 começa a valer a pena?
+## Próximos Passos (ordenados por prioridade)
 
-Construir a curva `accuracy vs FLOPs` e medir `accuracy por MFLOP`. O resultado forte seria uma configuração como:
+### 1️⃣ Confirmar eficiência e estabilidade
 
-```text
-MLP 128 ≈ V4 64
-mesma accuracy
-menos FLOPs
-```
+**Pergunta:** O padrão de 48% menos FLOPs com ~0.4pp de perda se mantém em mais seeds?
 
-**Grade econômica atual:**
+- Rodar seeds 11–20 para V4 s=2 e MLP 235
+- Testar V4 s=2 vs s=4 em configurações econômicas
+- Medir std de accuracy e entropia L2
+- **Métrica-chave:** Acc/MFLOP
 
-```text
-hidden = 64, 96, 112, 128
-states = 2
-gate = 4, 6, 8
-skip = off
-seeds = 1-3
-epochs = 5 inicialmente
-```
+### 2️⃣ Explorar trade-offs de gate e estados
 
-Cada execução V4 deve registrar accuracy, FLOPs, parâmetros, tempo e entropia/uso dos especialistas por época.
+**Pergunta:** Existe um ponto ótimo de accuracy vs eficiência?
 
-## E3 — Especialização Real
+- Temperatura (0.5, 1.0, 2.0) em seeds com entropia alta natural
+- Escala de estados (2, 4, 8, 16) vs entropia L1/L2
+- Registrar distribuição de especialistas por classe
+- **Métrica-chave:** curva accuracy × FLOPs
 
-**Pergunta:** Os especialistas realmente aprendem coisas diferentes?
+### 3️⃣ Otimização da arquitetura V4 Econômica
 
-Durante inferência, registrar classe, imagem e especialista escolhido. Gerar tabelas e heatmaps por classe:
+**Pergunta:** Qual config minimiza perda de accuracy maximizando economia de FLOPs?
 
-```text
-classe 0 -> especialista 2
-classe 1 -> especialista 1
-classe 2 -> especialista 3
-```
+- Testar hidden ajustado para FLOPs balanceados
+- Gate menor (4–8)
+- Estados reduzidos (2–4)
+- Sem skip
+- **Objetivo:** encontrar o ponto ótimo na curva accuracy/FLOPs
 
-## E4 — Fashion-MNIST
+### 4️⃣ Testes de generalização
 
-**Pergunta:** A V4 funciona fora de dígitos?
+**Pergunta:** A eficiência da V4 se mantém em outros datasets?
 
-Repetir a bateria de MNIST em roupas, sapatos e objetos similares. Esse teste separa memorização de dígitos de generalização visual um pouco mais semântica.
+- Moons, Spirals, 20 Features (datasets sintéticos)
+- MNIST completo ✅ (concluído)
+- Fashion-MNIST
+- CIFAR-10 (futuro)
+- **Métrica-chave:** Acc/MFLOP cruzando datasets
 
-## E5 — Escala dos Estados
+### 5️⃣ Arena de arquiteturas (V5–V9)
 
-**Pergunta:** Existe um número ótimo de especialistas?
+**Pergunta:** Existe uma arquitetura melhor de roteamento/especialização?
 
-Testar:
+| Challenger | Ideia central |
+|------------|---------------|
+| V5 | Especialistas competem sem gate externo |
+| V6 | Top-2 sparse routing |
+| V7 | Árvore hierárquica de gates |
+| V8 | Gate com memória de uso |
+| V9 | Especialistas low-rank |
 
-```text
-2, 4, 8, 16, 32 estados
-```
+**Regra:** mesmas seeds, dataset, épocas, batch, lr, l2.
 
-Registrar accuracy, FLOPs, uso dos especialistas e entropia. Este é um dos experimentos mais importantes, porque testa diretamente se mais estados ajudam ou apenas criam colapso/desperdício.
+### 6️⃣ Multi-agente / integração
 
-## E6 — Curva de Entropia
+**Pergunta:** A economia de FLOPs se traduz em ganho real em sistemas multi-agente?
 
-**Pergunta:** Quando ocorre o colapso dos especialistas?
+- Cada especialista como um "agente" independente
+- Medir economia real em pipelines locais
+- Avaliar impacto em simulações de circuitos
 
-Registrar por época:
+### 7️⃣ Documentação e visualização
 
-```text
-entropia layer1
-entropia layer2
-distribuição de tráfego por especialista
-```
+- Consolidar logs de entropia, distribuição, Acc/MFLOP
+- Gráficos: Accuracy vs FLOPs, entropia por camada
+- Diários PT-BR/EN-US prontos para publicação
 
-**Status:** logging implementado no experimento MNIST para V4. Cada linha de histórico agora inclui distribuição e entropia normalizada das duas camadas.
+---
 
-## E7 — Robustez
+## Experimentos concluídos
 
-**Pergunta:** Especialistas são mais robustos a ruído?
+| Experimento | Status | Resultado principal |
+|------------|--------|---------------------|
+| E1 — MNIST 10 seeds V4 s=2 | ✅ | 94.78% ±0.36% vs MLP 95.05% ±0.15% |
+| E2 — Temperatura | ✅ | Não altera regime de entropia |
+| E3 — Controle de parâmetros | ✅ | V4 empata em accuracy com MLP de mesmo tamanho, mas gasta metade dos FLOPs |
+| E4 — Escala de estados | ✅ | Mais estados → pior accuracy (s=2: 95.23% → s=16: 93.34%) |
+| E5 — Especialização por classe | ✅ | Existe mas não melhora accuracy |
 
-Testar MNIST com ruído:
+---
 
-```text
-10%, 20%, 30%
-```
+## Hipóteses refutadas
 
-Comparar degradação de MLP vs V4.
+1. ~~"Mais especialistas = melhor accuracy"~~ → Falso. Mais estados piora.
+2. ~~"Temperatura controla colapso do gate"~~ → Falso. Regime é definido pela seed.
+3. ~~"V4 ganha performance com mais parâmetros"~~ → Parcial. Igual参ados, empata em accuracy; o ganho real é eficiência.
 
-## E8 — Ponte para Transformers
+## Hipóteses em teste
 
-**Pergunta:** A ideia sobrevive quando a camada densa vira FFN de Transformer?
-
-Começar pequeno:
-
-```text
-Tiny Transformer
-TinyStories
-GPT mini local
-```
-
-Medir loss, perplexity, tokens/s, VRAM e FLOPs estimados.
-
-## E9 — Arena de Arquiteturas
-
-**Pergunta:** A resposta está dentro da família V4 ou existe uma arquitetura melhor de roteamento/especialização?
-
-Estrutura:
-
-```text
-arena/
-baseline_mlp
-v4_sparse_top1
-v5_competicao
-v6_top2
-v7_arvore
-v8_memoria
-v9_low_rank
-```
-
-**Regra central:** mesmas seeds, dataset, épocas, otimizador, batch size e cálculo de FLOPs.
-
-**Status:** especificação inicial criada em `arena/`. V4 econômica passa a ser baseline experimental; V5-V9 entram como desafiantes.
+1. "V4 econômica (s=2, gate pequeno) maximiza Acc/MFLOP"
+2. "A eficiência se mantém em outros datasets"
+3. "V5–V9 podem superar V4 em accuracy ou eficiência"
