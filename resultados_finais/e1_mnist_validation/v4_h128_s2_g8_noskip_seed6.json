@@ -15,8 +15,8 @@
     "use_skip": false,
     "params": 242622,
     "accuracy": 0.9452,
-    "train_time_sec": 75.07982089999132,
-    "inference_time_sec": 0.23302720003994182,
+    "train_time_sec": 71.39566480001668,
+    "inference_time_sec": 0.22196120000444353,
     "estimated_sparse_inference_flops_per_sample": 250688,
     "estimated_dense_executed_flops_per_sample": 484160,
     "history": [
