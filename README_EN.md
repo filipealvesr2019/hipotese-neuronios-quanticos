@@ -54,6 +54,16 @@ Rigorous stress tests across 30 seeds demonstrated a **technical tie** in accura
 | 1.0 | 93.97% | 0.869 |
 | 2.0 | 94.18% | 0.801 |
 
+### E3 — Parameter control (seed 1)
+
+| Model | Params | Acc | FLOPs |
+|-------|--------|-----|-------|
+| MLP 128 | 118K | 94.97% | 236K |
+| MLP 235 | **242K** | 95.15% | 483K |
+| V4 s=2 | **242K** | **95.23%** | **250K** |
+
+**At equal params, V4 ties MLP in accuracy (95.23% vs 95.15%) but uses 48% fewer FLOPs.** V4's real advantage is efficiency, not accuracy.
+
 ### Key findings
 
 1. **V4 did not outperform MLP** (94.78% vs 95.05%, -0.28pp)
@@ -62,5 +72,6 @@ Rigorous stress tests across 30 seeds demonstrated a **technical tie** in accura
 4. **More states → worse accuracy** (s=2: 95.23% → s=16: 93.34%)
 5. **Real specialization exists** (s=16: experts 4/12 in L1, 8/14 in L2) but does not improve accuracy
 6. **Problem is architecture, not routing** — V4 has a fundamental limitation in gradient flow via top-1 hard selection
+7. **At equal parameters, V4 ties MLP** — the gain is efficiency (half the FLOPs), not accuracy
 
 Full report: [`docs/en-US/REPORT_V4_MNIST.md`](docs/en-US/REPORT_V4_MNIST.md)
