@@ -267,3 +267,208 @@ Acc=0.0960 | L1=0.6450 | L2=0.8429
 
 Resultados salvos em resultados_finais/v4_entropy_accuracy_full.json
 PS F:\neuronios quanticos> 
+
+Esses resultados mostram que o experimento não está treinando nada. Ele está praticamente fazendo inferência com pesos aleatórios.
+
+Observe:
+
+```text
+Acc=0.10
+Acc=0.09
+Acc=0.11
+```
+
+Em um problema de:
+
+```text
+10 classes
+```
+
+o chute aleatório esperado é:
+
+```text
+1/10 = 0.10 = 10%
+```
+
+Exatamente o que apareceu.
+
+Além disso:
+
+```text
+L1=0.99
+L2=0.94
+```
+
+significa apenas que o gate está distribuindo amostras entre especialistas.
+
+Não significa que os especialistas aprenderam algo.
+
+Você mediu:
+
+```text
+Entropia do roteamento
+```
+
+mas não mediu:
+
+```text
+Capacidade de aprender
+```
+
+---
+
+O problema é que o script atual faz:
+
+```python
+model = MLPMultiEstadoV4(...)
+logits = model.forward(X)
+```
+
+e depois:
+
+```python
+acc = np.mean(preds == y)
+```
+
+mas nunca faz:
+
+```python
+backpropagation
+```
+
+nem:
+
+```python
+gradient descent
+```
+
+nem:
+
+```python
+atualização dos pesos
+```
+
+Então a rede continua aleatória.
+
+---
+
+O resultado útil que você extraiu foi:
+
+```text
+Entropia alta
+não gera inteligência
+```
+
+porque teve seeds com:
+
+```text
+L1 = 0.99
+L2 = 0.94
+```
+
+e accuracy:
+
+```text
+0.09
+```
+
+ou seja:
+
+```text
+especialistas distribuídos ≠ especialistas úteis
+```
+
+---
+
+O próximo experimento que realmente vale a pena fazer é:
+
+# E5 — Stability vs Accuracy
+
+Treinar de verdade.
+
+Para cada seed:
+
+```text
+treina
+↓
+mede accuracy
+↓
+mede entropia
+↓
+mede uso dos especialistas
+```
+
+E gerar:
+
+```text
+Seed | Accuracy | L1 | L2
+```
+
+Depois calcular:
+
+```text
+Correlação(Accuracy, L1)
+Correlação(Accuracy, L2)
+```
+
+Porque sua hipótese atual é:
+
+```text
+mais entropia = melhor accuracy
+```
+
+mas os resultados antigos do MNIST sugerem o contrário:
+
+```text
+seeds colapsadas
+=
+melhor accuracy
+```
+
+Lembra do relatório:
+
+```text
+Collapsed seeds have BETTER accuracy than high-entropy seeds
+```
+
+Essa é uma descoberta importante.
+
+Talvez o problema do V4 seja exatamente:
+
+```text
+forçar distribuição demais
+```
+
+quando o modelo naturalmente quer:
+
+```text
+especializar poucos experts
+```
+
+---
+
+Eu faria agora:
+
+```text
+E5
+Treino real
+10 seeds
+```
+
+e salvaria:
+
+```text
+resultados_finais/e5_entropy_vs_accuracy.json
+```
+
+Esse experimento vai responder uma das maiores dúvidas que ainda restam na sua pesquisa:
+
+```text
+Entropia ajuda?
+
+ou
+
+Entropia atrapalha?
+```
+
+Pelos dados que você já coletou no MNIST, minha aposta é que a segunda opção está mais próxima da realidade.
