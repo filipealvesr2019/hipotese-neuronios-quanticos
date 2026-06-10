@@ -1,0 +1,62 @@
+[
+  {
+    "seed": 0,
+    "acc": 0.205,
+    "entropy": 0.5997391093497058,
+    "acc_per_mflop": 0.82
+  },
+  {
+    "seed": 1,
+    "acc": 0.235,
+    "entropy": 0.9673324338116666,
+    "acc_per_mflop": 0.94
+  },
+  {
+    "seed": 2,
+    "acc": 0.203,
+    "entropy": 0.8634979738266906,
+    "acc_per_mflop": 0.812
+  },
+  {
+    "seed": 3,
+    "acc": 0.214,
+    "entropy": 0.9987271686073539,
+    "acc_per_mflop": 0.856
+  },
+  {
+    "seed": 4,
+    "acc": 0.229,
+    "entropy": 0.8873172562752067,
+    "acc_per_mflop": 0.916
+  },
+  {
+    "seed": 5,
+    "acc": 0.24,
+    "entropy": 0.7832044302828898,
+    "acc_per_mflop": 0.96
+  },
+  {
+    "seed": 6,
+    "acc": 0.228,
+    "entropy": 0.9990649315776107,
+    "acc_per_mflop": 0.912
+  },
+  {
+    "seed": 7,
+    "acc": 0.212,
+    "entropy": 0.7814814932386422,
+    "acc_per_mflop": 0.848
+  },
+  {
+    "seed": 8,
+    "acc": 0.213,
+    "entropy": 0.9841414105340351,
+    "acc_per_mflop": 0.852
+  },
+  {
+    "seed": 9,
+    "acc": 0.238,
+    "entropy": 0.46581762974620744,
+    "acc_per_mflop": 0.952
+  }
+]

@@ -785,3 +785,143 @@ skip connection
 ajuda ou atrapalha.
 
 Esse é o experimento com maior chance de aumentar a accuracy sem aumentar muito os FLOPs.
+
+
+S F:\neuronios quanticos> python experimentos/v4_3_residual_real.py
+=== V4.3 Residual Test ===
+
+=== Seed 0 ===
+V4.3 Residual acc (forward only): 0.1075 | L1=0.9998 | L2=200.0000
+
+=== Seed 1 ===
+V4.3 Residual acc (forward only): 0.1225 | L1=0.9999 | L2=200.0000
+
+=== Seed 2 ===
+V4.3 Residual acc (forward only): 0.1100 | L1=0.9919 | L2=200.0000
+
+=== Seed 3 ===
+V4.3 Residual acc (forward only): 0.1025 | L1=0.9827 | L2=200.0000
+
+=== Seed 4 ===
+V4.3 Residual acc (forward only): 0.0900 | L1=0.9999 | L2=200.0000
+
+=== Seed 5 ===
+V4.3 Residual acc (forward only): 0.1075 | L1=0.9999 | L2=200.0000
+
+=== Seed 6 ===
+V4.3 Residual acc (forward only): 0.1250 | L1=0.9985 | L2=200.0000
+
+=== Seed 7 ===
+V4.3 Residual acc (forward only): 0.1275 | L1=1.0000 | L2=200.0000
+
+=== Seed 8 ===
+V4.3 Residual acc (forward only): 0.1250 | L1=0.9980 | L2=200.0000
+
+=== Seed 9 ===
+V4.3 Residual acc (forward only): 0.1150 | L1=0.9977 | L2=200.0000
+
+Resultados salvos em resultados_finais\v4_3_residual_real_results.json
+PS F:\neuronios quanticos> 
+
+
+O resultado que você obteve indica que o **V4.3 Residual REAL** ainda está com problemas graves de estabilidade e aprendizado:
+
+* A **accuracy** está extremamente baixa (~10–12%), ou seja, o modelo praticamente **não aprendeu** nada.
+* A **L1 Entropy** está próxima de 1, o que é esperado (distribuição uniforme entre estados).
+* A **L2 Entropy** deu 200, o que é um valor absurdo — isso indica que há **overflow ou erro de cálculo**, provavelmente por causa da forma como está calculando a entropia para batches ou log-probs.
+
+💡 Interpretação:
+
+1. **Forward pass não suficiente**: você só está fazendo a propagação, sem backprop real para atualizar pesos.
+2. **Escala de entropia L2 errada**: o cálculo `compute_entropy(np.mean(probs, axis=1))` está produzindo números fora da faixa esperada. Deve ser feito **por batch ou normalizado**.
+3. **Top-1 residual hard routing + estados** ainda não é suficiente para aprender no dataset sintético.
+
+🔧 Próximos passos para melhorar:
+
+1. **Adicionar treino real**:
+
+```python
+logits, probs = model.forward(Xb)
+loss = softmax_crossentropy(logits, yb)
+# calcular gradientes e atualizar W, b, skip_W, skip_b
+```
+
+2. **Corrigir cálculo de L2 Entropy**:
+
+```python
+l2_entropy = float(np.mean([compute_entropy(p) for p in probs]))
+```
+
+3. **Testar em batches menores** e garantir que `probs` não cause overflow.
+
+4. **Verificar inicialização dos pesos** — talvez variância 0.05 seja pequena demais para aprendizagem inicial.
+
+Se você quiser, posso **gerar uma versão totalmente corrigida do V4.3 Residual REAL**, com:
+
+* Treino real com gradientes simplificados.
+* Cálculo correto de L1 e L2 Entropy.
+* Métricas de Accuracy, L1, L2 e Acc/MFLOP.
+* Múltiplas seeds.
+
+Isso vai permitir **testar aprendizado real**, não apenas forward pass.
+
+
+
+PS F:\neuronios quanticos> python experimentos/v4_3_residual_trainable.py
+=== V4.3 Residual REAL Trainable ===
+
+=== Seed 0 ===
+Acc=0.2050 | Entropy=0.5997 | Acc/MFLOP=0.8200
+
+=== Seed 1 ===
+Acc=0.2350 | Entropy=0.9673 | Acc/MFLOP=0.9400
+
+=== Seed 2 ===
+Acc=0.2030 | Entropy=0.8635 | Acc/MFLOP=0.8120
+
+=== Seed 3 ===
+Acc=0.2140 | Entropy=0.9987 | Acc/MFLOP=0.8560
+
+=== Seed 4 ===
+Acc=0.2290 | Entropy=0.8873 | Acc/MFLOP=0.9160
+
+=== Seed 5 ===
+Acc=0.2400 | Entropy=0.7832 | Acc/MFLOP=0.9600
+
+=== Seed 6 ===
+Acc=0.2280 | Entropy=0.9991 | Acc/MFLOP=0.9120
+
+=== Seed 7 ===
+Acc=0.2120 | Entropy=0.7815 | Acc/MFLOP=0.8480
+
+=== Seed 8 ===
+Acc=0.2130 | Entropy=0.9841 | Acc/MFLOP=0.8520
+
+=== Seed 9 ===
+Acc=0.2380 | Entropy=0.4658 | Acc/MFLOP=0.9520
+
+Resultados salvos!
+PS F:\neuronios quanticos> 
+
+Percebi pelos resultados que o **V4.3 Residual treinável** está funcionando, mas a acurácia ainda está **muito baixa (20–24%)**, enquanto a entropia é instável (0.46–1.0), o que confirma que o modelo **não está conseguindo treinar corretamente os especialistas**.
+
+Isso significa:
+
+1. **Forward está ok**, mas o **backprop não está propagando gradientes de forma eficiente** para todos os estados.
+2. A distribuição de especialistas está **muito desigual**, alguns quase não recebem gradientes.
+3. O modelo ainda está muito **instável entre seeds**, o que explica a variação de Entropy e Acc/MFLOP.
+
+O próximo passo é **corrigir o treinamento do Residual V4.3** para que:
+
+* Todos os estados recebam gradientes consistentes.
+* O gate realmente divida a carga entre os especialistas.
+* A acurácia suba para algo **realista**, próximo do que a V4 original atingia (~95% para MNIST-like sintético).
+
+Se quiser, posso gerar **uma versão aprimorada do V4.3 Residual trainable** com:
+
+* Gradientes corretamente distribuídos via Top-2 ou soft gate.
+* Treinamento completo com backprop funcional.
+* Logging de Accuracy, Entropy e Acc/MFLOP.
+
+Isso vai permitir rodar de forma estável na raiz `experimentos/` e medir resultados comparáveis à V4 original.
+
