@@ -231,3 +231,39 @@ That would suggest specialization is replacing part of the active width of the d
 - V9: low-rank experts
 
 **Conclusion:** V4 will not be abandoned. It becomes the experimental baseline of the arena. New architectures only survive if they beat V4/MLP in accuracy, FLOPs, or routing stability.
+
+PS F:\neuronios quanticos> python experimentos/v4_stable_tuning.py 
+=== V4 Entropy vs Accuracy — Full Standalone ===
+
+=== Seed 0 ===
+Acc=0.1000 | L1=0.9975 | L2=0.7169
+
+=== Seed 1 ===
+Acc=0.0980 | L1=0.7798 | L2=0.0672
+
+=== Seed 2 ===
+Acc=0.1055 | L1=0.9033 | L2=0.8873
+
+=== Seed 3 ===
+Acc=0.0905 | L1=0.7376 | L2=0.8681
+
+=== Seed 4 ===
+Acc=0.1075 | L1=0.8541 | L2=0.0062
+
+=== Seed 5 ===
+Acc=0.0865 | L1=0.8183 | L2=0.9267
+
+=== Seed 6 ===
+Acc=0.0970 | L1=0.8757 | L2=0.4398
+
+=== Seed 7 ===
+Acc=0.0995 | L1=0.9793 | L2=0.9414
+
+=== Seed 8 ===
+Acc=0.0975 | L1=0.6331 | L2=0.2043
+
+=== Seed 9 ===
+Acc=0.0960 | L1=0.6450 | L2=0.8429
+
+Resultados salvos em resultados_finais/v4_entropy_accuracy_full.json
+PS F:\neuronios quanticos> 

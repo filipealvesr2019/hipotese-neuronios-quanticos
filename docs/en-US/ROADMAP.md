@@ -121,3 +121,5 @@
 1. "Economical V4 (s=2, small gate) maximizes Acc/MFLOP"
 2. "Efficiency holds on other datasets"
 3. "V5–V9 can beat V4 in accuracy or efficiency"
+
+
