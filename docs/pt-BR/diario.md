@@ -925,3 +925,52 @@ Se quiser, posso gerar **uma versão aprimorada do V4.3 Residual trainable** com
 
 Isso vai permitir rodar de forma estável na raiz `experimentos/` e medir resultados comparáveis à V4 original.
 
+
+S F:\neuronios quanticos> python "experimentos/V4.4 Soft Backup.py"
+=== V4.4 Soft Backup Test ===
+
+=== Seed 0 ===
+V4.4 Soft Backup acc: 0.0940 | L1=1.0000 | L2=1.0000 | Acc/MFLOP=0.3760
+
+=== Seed 1 ===
+V4.4 Soft Backup acc: 0.0975 | L1=1.0000 | L2=1.0000 | Acc/MFLOP=0.3900
+
+=== Seed 2 ===
+V4.4 Soft Backup acc: 0.0970 | L1=1.0000 | L2=1.0000 | Acc/MFLOP=0.3880
+
+=== Seed 3 ===
+V4.4 Soft Backup acc: 0.1020 | L1=1.0000 | L2=1.0000 | Acc/MFLOP=0.4080
+
+=== Seed 4 ===
+V4.4 Soft Backup acc: 0.0975 | L1=1.0000 | L2=1.0000 | Acc/MFLOP=0.3900
+
+=== Seed 5 ===
+V4.4 Soft Backup acc: 0.1055 | L1=1.0000 | L2=1.0000 | Acc/MFLOP=0.4220
+
+=== Seed 6 ===
+V4.4 Soft Backup acc: 0.0985 | L1=1.0000 | L2=1.0000 | Acc/MFLOP=0.3940
+
+=== Seed 7 ===
+V4.4 Soft Backup acc: 0.1000 | L1=1.0000 | L2=1.0000 | Acc/MFLOP=0.4000
+
+=== Seed 8 ===
+V4.4 Soft Backup acc: 0.0950 | L1=1.0000 | L2=1.0000 | Acc/MFLOP=0.3800
+
+=== Seed 9 ===
+V4.4 Soft Backup acc: 0.1090 | L1=1.0000 | L2=1.0000 | Acc/MFLOP=0.4360
+
+Resultados salvos em F:\neuronios quanticos\resultados_finais\v4_4_soft_backup_results.json
+PS F:\neuronios quanticos> 
+
+
+Perfeito! O resultado do **V4.4 Soft Backup** mostra que a arquitetura está com **alta entropia (L1=1.0, L2=1.0)** e baixa acurácia (~9–10%), mas ainda mantém um **Acc/MFLOP consistente**. Isso indica que, embora a arquitetura seja eficiente em FLOPs, ela **não aprendeu nada útil ainda**, e precisa de ajustes de treino, inicialização ou gate.
+
+O próximo passo seria:
+
+1. **Testar versões trainable** do V4.4 para ver se o modelo consegue convergir de forma estável.
+2. **Comparar com V4.3 Residual Trainable** para medir se a estratégia Soft Backup realmente melhora estabilidade ou eficiência.
+3. **Registrar métricas completas**: Accuracy, Entropy (L1/L2) e Acc/MFLOP, como nos testes anteriores.
+4. **Experimentar ajustes de gate, skip e learning rate** para tentar tirar L2 do colapso total.
+
+Se quiser, posso gerar **um arquivo completo de V4.4 Soft Backup trainable** pronto para rodar 10 seeds, medindo Accuracy, Entropy e Acc/MFLOP, como você fez com V4.3. Isso vai permitir você comparar diretamente as três arquiteturas (Residual, Shared Expert, Soft Backup) e ver qual é mais estável.
+
