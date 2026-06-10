@@ -974,3 +974,292 @@ O próximo passo seria:
 
 Se quiser, posso gerar **um arquivo completo de V4.4 Soft Backup trainable** pronto para rodar 10 seeds, medindo Accuracy, Entropy e Acc/MFLOP, como você fez com V4.3. Isso vai permitir você comparar diretamente as três arquiteturas (Residual, Shared Expert, Soft Backup) e ver qual é mais estável.
 
+Esse resultado já é bem mais informativo do que os anteriores — agora você tem **treino real funcionando**, e não só forward aleatório.
+
+Mas o diagnóstico aqui é bem claro:
+
+---
+
+# 1. O que esses números dizem de verdade
+
+### Accuracy:
+
+```text
+0.123 ~ 0.146
+```
+
+Isso em MNIST (10 classes) significa:
+
+```text
+aleatório = 0.10
+modelo = ~0.13
+```
+
+👉 Ou seja:
+
+* existe **sinal de aprendizado**
+* mas é **extremamente fraco**
+* praticamente colado no baseline aleatório
+
+---
+
+### Entropy:
+
+```text
+0.64 ~ 0.69
+```
+
+Isso é importante:
+
+* não está colapsado (não é 0)
+* não está uniforme perfeito (não é 1)
+* está numa zona intermediária estável
+
+👉 isso sugere:
+
+```text
+o gate está aprendendo alguma coisa
+mas não está sendo usado de forma útil
+```
+
+---
+
+# 2. Diagnóstico estrutural (bem direto)
+
+Você agora está nesse ponto:
+
+## ✔ O sistema TREINA
+
+## ❌ mas não REPRESENTA bem
+
+Ou seja:
+
+```text
+gradiente existe
+→ mas não vira capacidade discriminativa
+```
+
+---
+
+# 3. O problema real não é mais “treino”
+
+Agora mudou completamente de fase.
+
+Você NÃO tem mais problema de:
+
+* forward bug ❌
+* ausência de backprop ❌
+* instabilidade total ❌
+
+Você tem isso aqui:
+
+---
+
+## PROBLEMA CENTRAL ATUAL
+
+```text
+routing não está alinhado com o target supervision signal
+```
+
+---
+
+Em outras palavras:
+
+> o modelo aprende a dividir dados
+> mas não aprende a dividir “por classe útil”
+
+---
+
+# 4. O que a entropia está te dizendo agora
+
+Esse padrão:
+
+```text
+Entropy ~ 0.65 stable
+```
+
+é MUITO revelador.
+
+Significa:
+
+```text
+o gate encontrou um equilíbrio estacionário
+```
+
+mas esse equilíbrio é:
+
+* nem colapsado
+* nem especializado
+* nem informativo
+
+👉 isso é típico de:
+
+```text
+dead equilibrium routing
+```
+
+---
+
+# 5. O insight mais importante desse experimento
+
+Antes você tinha:
+
+```text
+V4:
+- alta accuracy (~93%)
+- colapso parcial
+```
+
+Agora você tem:
+
+```text
+V4.4:
+- gate estável
+- mas performance caiu brutalmente (~13%)
+```
+
+---
+
+## isso significa:
+
+### você destruiu o colapso…
+
+mas também destruiu a utilidade
+
+---
+
+# 6. Hipótese forte que emerge agora
+
+Com base em TODOS os teus logs:
+
+## nova hipótese realista:
+
+```text
+colapso parcial não é bug
+é parte do mecanismo de eficiência
+```
+
+---
+
+Você já viu isso antes:
+
+* V4 com colapso → 90%+
+* V4 com entropia controlada → piorou
+* V4.4 soft → ~13%
+
+---
+
+# 7. Interpretação técnica mais profunda
+
+Você está no clássico trade-off de MoE:
+
+## 3 regimes:
+
+### (A) colapso total
+
+* 1 expert domina
+* funciona razoavelmente
+
+### (B) equilíbrio difuso (seu V4.4 atual)
+
+* todos participam pouco
+* ninguém aprende bem
+* performance cai
+
+### (C) routing útil (você ainda não atingiu isso)
+
+* especialistas dividem por função real
+* accuracy sobe
+
+---
+
+# 8. O bug conceitual que você está enfrentando
+
+Você está tentando forçar:
+
+```text
+entropia alta = bom
+```
+
+mas o sistema está te respondendo:
+
+```text
+entropia média = inútil
+```
+
+---
+
+# 9. O que realmente precisa ser testado agora
+
+Não é mais arquitetura.
+
+É **signal alignment do gate**.
+
+---
+
+## próximo experimento correto:
+
+### E7 — Label-aligned routing
+
+Você precisa medir:
+
+```text
+P(expert | class)
+```
+
+ou seja:
+
+* especialista 1 ativa mais em “3”?
+* especialista 2 ativa mais em “7”?
+
+---
+
+Se NÃO existir isso:
+
+```text
+gate está só randomizando divisão de carga
+```
+
+---
+
+# 10. Conclusão honesta
+
+Esse resultado significa:
+
+### você saiu da fase “não treina”
+
+e entrou na fase:
+
+## “treina, mas não especializa”
+
+E isso é MUITO mais difícil.
+
+---
+
+# 11. Diagnóstico final em uma frase
+
+```text
+O modelo aprendeu a dividir computação,
+mas não aprendeu a dividir significado.
+```
+
+---
+
+# Se quiser próximo passo real
+
+Posso te montar um experimento chamado:
+
+## V4.5 — Routing Mutual Information Analyzer
+
+Ele mede:
+
+* MI(expert, class)
+* expert purity
+* collapse vs utility curve
+* entropy vs accuracy phase diagram
+
+Isso vai te dizer finalmente:
+
+> se seus “neurônios multiestado” estão aprendendo algo estrutural ou só redistribuindo ruído.
+
+Só fala.
