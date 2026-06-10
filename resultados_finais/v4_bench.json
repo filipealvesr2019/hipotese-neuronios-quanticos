@@ -1,0 +1,18 @@
+{
+  "xor": {
+    "mlp_acc": 0.872,
+    "moe_acc": 0.857
+  },
+  "gaussian": {
+    "mlp_acc": 0.948,
+    "moe_acc": 0.91
+  },
+  "spiral": {
+    "mlp_acc": 0.6945,
+    "moe_acc": 0.6825
+  },
+  "mnist_like": {
+    "mlp_acc": 0.35633333333333334,
+    "moe_acc": 0.297
+  }
+}
