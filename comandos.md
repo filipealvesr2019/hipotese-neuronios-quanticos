@@ -8,3 +8,5 @@
 
 
  python experimentos\V4_7_top2_moe.py
+
+python experimentos/v5.py
