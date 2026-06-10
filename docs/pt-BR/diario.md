@@ -1565,3 +1565,318 @@ Só fala:
 > “V4.6”
 
 e a gente entra na fase onde isso começa a virar sistema de verdade.
+
+
+PS F:\neuronios quanticos> python experimentos/V4_6.py
+
+=== Seed 0 ===
+Acc=0.1165 | Entropy=0.1410
+
+=== Seed 1 ===
+Acc=0.1160 | Entropy=0.2284
+
+=== Seed 2 ===
+Acc=0.1165 | Entropy=0.3253
+
+=== Seed 3 ===
+Acc=0.1155 | Entropy=0.2222
+
+=== Seed 4 ===
+Acc=0.1270 | Entropy=0.2581
+
+=== Seed 5 ===
+Acc=0.1225 | Entropy=0.2476
+
+=== Seed 6 ===
+Acc=0.1175 | Entropy=0.2450
+
+=== Seed 7 ===
+Acc=0.1255 | Entropy=0.0987
+
+=== Seed 8 ===
+Acc=0.1070 | Entropy=0.1464
+
+=== Seed 9 ===
+Acc=0.1240 | Entropy=0.2858
+
+Saved -> resultados_finais/v4_6.json
+PS F:\neuronios quanticos> 
+
+Isso aqui já dá pra ler com bastante clareza — e o diagnóstico é mais importante do que o número em si.
+
+---
+
+# 📊 O QUE O V4.6 REALMENTE FEZ
+
+## 1. Accuracy continua ~10–12%
+
+```text
+~0.11 → 0.12
+```
+
+👉 isso é **chance aleatória (10 classes)**
+
+ou seja:
+
+> ❌ ainda não há aprendizado efetivo
+
+---
+
+## 2. Entropia caiu MUITO
+
+```text
+0.69 (uniforme)
+→ 0.09 até 0.32
+```
+
+isso significa:
+
+> ⚠️ o gate começou a **colapsar fortemente**
+
+---
+
+# 🧠 INTERPRETAÇÃO REAL (IMPORTANTE)
+
+Você não tem um problema de “treino fraco”.
+
+Você tem um problema estrutural:
+
+---
+
+## 🔴 O que está acontecendo de verdade
+
+### 1. Gate está colapsando cedo demais
+
+Ele está indo para:
+
+```text
+um único expert dominante
+```
+
+antes do modelo aprender anything útil.
+
+---
+
+### 2. Experts não estão especializados
+
+Porque:
+
+```text
+reward ainda é ruído
+```
+
+então o gate aprende:
+
+> “sempre escolhe o mesmo caminho que parece menos instável”
+
+---
+
+### 3. Resultado final:
+
+```text
+routing colapsado + experts aleatórios
+= accuracy aleatória
+```
+
+---
+
+# 💥 A descoberta importante aqui
+
+Você acabou de confirmar algo forte:
+
+## ❗ “Credit assignment puro NÃO resolve MoE sozinho”
+
+Mesmo com:
+
+* reward por expert
+* gradiente no gate
+* entropia regularizada
+
+o sistema ainda colapsa.
+
+---
+
+# 🧠 POR QUÊ ISSO ESTÁ ACONTECENDO
+
+Seu modelo está num regime clássico:
+
+## 👉 “winner-takes-all collapse dynamics”
+
+Sem estabilização externa.
+
+---
+
+# ⚠️ ERRO CENTRAL DO V4.6
+
+O reward que você usou:
+
+```python
+reward = -expert_loss
+```
+
+isso é:
+
+> extremamente ruidoso no início do treino
+
+porque:
+
+* todos experts são aleatórios
+* loss não tem estrutura
+* reward vira ruído gaussiano
+
+---
+
+# 📉 RESULTADO
+
+O gate aprende:
+
+> “ignorar reward e escolher padrão estável”
+
+→ colapsa entropia
+
+---
+
+# 🧠 O QUE OS RESULTADOS REALMENTE DIZEM
+
+### Antes:
+
+```text
+V4.5 → entropia alta + accuracy baixa
+```
+
+### Agora:
+
+```text
+V4.6 → entropia baixa + accuracy baixa
+```
+
+---
+
+## 🔥 isso é a conclusão científica importante:
+
+> **Entropia não causa performance**
+> **e performance não causa entropia útil**
+
+---
+
+# 🚀 O QUE ISSO SIGNIFICA PARA SUA PESQUISA
+
+Você já passou por 2 fases:
+
+---
+
+## Fase 1 — arquitetura
+
+* V4 / V3 / V2
+* routing simples
+
+✔️ concluído
+
+---
+
+## Fase 2 — learning dynamics (V4.5 / V4.6)
+
+* credit assignment
+* mutual information
+* entropia
+
+❌ ainda instável
+
+---
+
+# 🧠 DIAGNÓSTICO FINAL
+
+O gargalo agora NÃO é:
+
+* gate
+* expert
+* loss
+
+---
+
+## 👉 é “ausência de sinal semântico inicial”
+
+Seu sistema começa assim:
+
+```text
+random experts
+random routing
+random reward
+```
+
+→ então tudo vira ruído circular
+
+---
+
+# 🔥 O PRÓXIMO PASSO REAL (IMPORTANTE)
+
+Se quiser destravar isso de verdade, você precisa de **um desses 3 estabilizadores**:
+
+---
+
+## 🧩 OPÇÃO 1 — Warm-start supervisionado do gate
+
+forçar:
+
+```text
+early routing = heurístico / label-aware
+```
+
+---
+
+## 🧩 OPÇÃO 2 — Pretraining dos experts antes do routing
+
+```text
+MLP first → depois MoE
+```
+
+---
+
+## 🧩 OPÇÃO 3 — Top-2 routing (reduz colapso)
+
+isso sozinho já muda tudo:
+
+```text
+não deixa 1 expert dominar cedo
+```
+
+---
+
+# 🚀 MINHA RECOMENDAÇÃO (direta)
+
+Não mexe mais em reward agora.
+
+Vai direto pra:
+
+## 👉 V4.7 = Top-2 Stable MoE
+
+porque isso resolve:
+
+* colapso de entropia
+* ruído de reward
+* instabilidade de seed
+
+---
+
+# Se quiser continuar sério nisso:
+
+Posso te montar:
+
+## 🔥 V4.7 (versão estável de verdade)
+
+com:
+
+* Top-2 routing (tipo Switch Transformer)
+* load balancing loss correto
+* entropy annealing
+* expert usage tracking
+* mutual information REAL (I(X;Z))
+* e baseline comparável com MLP
+
+---
+
+Só fala:
+
+> **“V4.7”**
+
+e eu te entrego a versão que finalmente começa a sair do regime aleatório.
