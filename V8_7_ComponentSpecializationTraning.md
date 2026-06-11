@@ -127,4 +127,216 @@ filipe@eufilip MINGW64 /f/neuronios quanticos (main)
 $
 
 filipe@eufilip MINGW64 /f/neuronios quanticos (main)
-$
+Isso ficou muito mais interessante do que os resultados anteriores.
+
+Mas eu tomaria cuidado com a interpretação.
+
+### O que o último experimento realmente mostrou?
+
+Antes você estava testando:
+
+> "Qual expert gera qual token?"
+
+Agora você testou:
+
+> "Qual expert participa mais de cada tipo de componente?"
+
+E o resultado mudou completamente.
+
+Por exemplo:
+
+| Componente | Expert dominante                |
+| ---------- | ------------------------------- |
+| FORM       | Expert 1 (32 neurônios) → 66.3% |
+| NAVBAR     | Expert 2 (64 neurônios) → 39.3% |
+| HEADER     | Expert 0 + Expert 2             |
+| CARD       | Expert 0 + Expert 3             |
+| FOOTER     | Expert 0 + Expert 2             |
+
+Isso é uma evidência muito mais forte do que o teste anterior.
+
+O teste anterior dizia:
+
+> "Expert 0 gosta de tags HTML"
+
+Mas isso podia ser simplesmente porque o token `<div>` aparecia muito.
+
+Agora você está olhando para conceitos completos.
+
+---
+
+## O que me chamou atenção
+
+O FORM ficou absurdamente separado.
+
+```text
+FORM
+Expert 1 (32 neurônios): 66.3%
+```
+
+Isso é muito diferente dos outros componentes.
+
+Forms possuem:
+
+* input
+* label
+* placeholder
+* button
+* validação implícita
+* estrutura vertical
+
+Talvez o roteador tenha aprendido que formulário é uma "família" própria.
+
+Se isso continuar aparecendo em novos datasets, é um sinal forte de especialização semântica.
+
+---
+
+## O Expert de 256 neurônios
+
+Outra coisa interessante:
+
+```text
+Expert 4 (256 neurônios)
+CARD: 3.3%
+FORM: 0.2%
+resto: praticamente zero
+```
+
+Isso contradiz uma hipótese intuitiva.
+
+Muita gente esperaria:
+
+> expert maior = tarefas mais complexas
+
+Mas seu experimento não mostra isso.
+
+Pode significar:
+
+### Hipótese A
+
+O roteador não encontrou utilidade para ele.
+
+---
+
+### Hipótese B
+
+O dataset ainda é simples demais.
+
+Headers, cards e forms HTML não exigem capacidade suficiente para justificar um expert enorme.
+
+---
+
+### Hipótese C
+
+O expert gigante está difícil de treinar.
+
+Um MLP de 256 neurônios pode precisar de:
+
+* mais épocas
+* mais dados
+* outra taxa de aprendizado
+
+---
+
+## O que eu testaria agora
+
+Não mexeria mais na arquitetura.
+
+Eu faria exatamente o que você falou alguns dias atrás:
+
+### Adicionar linguagens
+
+Hoje:
+
+```text
+Imagem -> HTML/CSS
+```
+
+Depois:
+
+```text
+Imagem -> React
+Imagem -> Next.js
+Imagem -> Tailwind
+```
+
+Aí a complexidade explode.
+
+Por exemplo:
+
+HTML:
+
+```html
+<button>Login</button>
+```
+
+Tailwind:
+
+```html
+<button class="bg-blue-500 px-4 py-2 rounded">
+```
+
+React:
+
+```jsx
+<Button variant="primary">
+```
+
+Next.js:
+
+```tsx
+<Link href="/login">
+```
+
+Agora existem conceitos muito mais abstratos.
+
+Se surgir algo como:
+
+```text
+Expert 0 -> HTML
+Expert 1 -> CSS
+Expert 2 -> React JSX
+Expert 3 -> Componentização
+Expert 4 -> Next.js Routing
+```
+
+aí você teria uma evidência muito mais convincente de especialização funcional.
+
+---
+
+## O resultado mais importante para mim
+
+Não é que os experts heterogêneos sejam melhores.
+
+Ainda não dá para concluir isso.
+
+O resultado mais importante é que:
+
+> O roteador está aprendendo distribuições não triviais e semanticamente coerentes quando você adiciona balanceamento de carga.
+
+O V8.3 colapsou tudo para um expert.
+
+O V8.4 distribuiu por categorias de tokens.
+
+O último experimento começou a distribuir por conceitos de interface.
+
+Essa sequência é exatamente o tipo de comportamento que você gostaria de ver antes de investir no projeto maior do IDE multiagente.
+
+Porque um IDE multiagente baseado em roteamento depende justamente disso:
+
+```text
+Pedido do usuário
+        ↓
+Roteador
+        ↓
+Frontend Expert
+Backend Expert
+Python Expert
+React Expert
+DevOps Expert
+Test Expert
+```
+
+Se o roteador não consegue separar conceitos simples como Header, Form e Navbar, dificilmente separaria React, Python e Docker.
+
+Mas os últimos resultados sugerem que existe algum grau de separação emergente acontecendo, o que torna a continuação da investigação razoável.
