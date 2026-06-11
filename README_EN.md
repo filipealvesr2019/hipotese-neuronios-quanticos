@@ -79,3 +79,7 @@ An isolated experiment (`V6.4`) fixed the massive expert capacity and scaled onl
 * `resultados_finais/` - Generated JSON files tracking raw metrics of each execution.
 * `graficos/` - t-SNE, gate usage history, and heatmaps visualizing modular routing.
 * `docs/` - Theoretical manuscripts and logbooks of the entire scientific research journey.
+
+## 📖 Final Research Note
+
+> This project does not demonstrate the universal superiority of a specific architecture. It documents an experimental exploration into the emergence of specialization in Sparse Mixture-of-Experts systems, including cases of success, failure, collapse, recovery, and scalability. The scripts and results are made available so that anyone can reproduce the tests and draw their own conclusions.

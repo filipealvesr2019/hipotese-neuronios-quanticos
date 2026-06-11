@@ -2,9 +2,11 @@
   <img src="https://img.shields.io/badge/V6.0-Stable-success?style=for-the-badge" alt="V6.0 Stable">
 </p>
 
-# V6.0 — Sparse Mixture of Experts Escalável com Roteamento Adaptativo e Pruning Emergente
+# Investigação Empírica da Especialização em Sparse Mixture of Experts
 
-Este projeto implementa uma arquitetura **Sparse Mixture of Experts (MoE)** com roteamento contextual adaptativo, especialistas heterogêneos e mecanismos emergentes de pruning automático construído inteiramente do zero em NumPy. O sistema demonstra escalabilidade em altíssima dimensionalidade e resolve o tradicional problema de "colapso de redundância", forçando redes a se especializarem em distribuições complexas.
+Este projeto é um laboratório de pesquisa dedicado a responder uma pergunta central em arquiteturas MoE: **Como a especialização emerge?**
+
+Através de uma série progressiva de experimentos de ablação e escalonamento construídos do zero (V1 a V7, indo de NumPy puro ao PyTorch industrial), investigamos as condições causais que forçam redes neurais a particionar espaços de dados, eliminando redundância e ativando mecanismos de *pruning* emergente.
 
 ## 🚀 Resultados Principais
 
@@ -79,3 +81,7 @@ Um experimento isolado (`V6.4`) fixou a capacidade massiva dos experts e escalou
 * `resultados_finais/` - Arquivos JSON gerados documentando métricas puras de cada run.
 * `graficos/` - Imagens t-SNE, de Uso e Heatmaps provando o roteamento modular.
 * `docs/` - Manuscritos teóricos e diários de bordo de toda a jornada da pesquisa científica.
+
+## 📖 Nota Final de Pesquisa
+
+> Este projeto não demonstra a superioridade universal de uma arquitetura específica. Ele documenta uma exploração experimental sobre o surgimento de especialização em sistemas Sparse Mixture-of-Experts, incluindo casos de sucesso, fracasso, colapso, recuperação e escalabilidade. Os scripts e resultados são disponibilizados para que qualquer pessoa possa reproduzir os testes e tirar suas próprias conclusões.
