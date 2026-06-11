@@ -3972,3 +3972,272 @@ Podemos evoluir seu V5.3H para um **equilíbrio melhor de FLOPs x acurácia** co
 
 Se você quiser, posso gerar **uma versão V5.3H final, ajustada** com todas essas melhorias **testada para balancear FLOPs e acurácia**, pronta para rodar direto.
 
+
+filipe@eufilip MINGW64 /f/neuronios quanticos (main)
+$  python experimentos/V5.4_Specialized_Experts_MoE.py
+
+===== DATASET: xor =====
+X shape: (500, 2), y shape: (500,)
+V5.4 MOE ACC: 0.5160
+Entropy: 1.2461
+Collapse: 0.9400
+MI: 0.2183
+Usage: [0.115 0.    0.373 0.385 0.127]
+FLOPs (est.): 192000
+Score: 0.4329
+Expert Perf: [0.39428968 0.7107826  0.44098297 0.48114419 0.59929761]
+
+===== DATASET: gaussian =====
+X shape: (500, 2), y shape: (500,)
+V5.4 MOE ACC: 0.5540
+Entropy: 1.4494
+Collapse: 0.9400
+MI: 0.1753
+Usage: [0.217 0.071 0.08  0.311 0.321]
+FLOPs (est.): 256000
+Score: 0.4411
+Expert Perf: [0.18231397 0.44311134 0.53767405 0.57954883 0.3357    ]
+
+===== DATASET: spiral =====
+X shape: (500, 2), y shape: (500,)
+V5.4 MOE ACC: 0.8600
+Entropy: 1.5663
+Collapse: 0.9400
+MI: 0.2175
+Usage: [0.258 0.12  0.171 0.276 0.175]
+FLOPs (est.): 256000
+Score: 0.6847
+Expert Perf: [0.46610814 0.47009996 0.33175185 0.54245435 0.45457711]
+
+===== DATASET: mnist_like =====
+X shape: (500, 784), y shape: (500,)
+V5.4 MOE ACC: 0.1100
+Entropy: 1.4831
+Collapse: 0.9400
+MI: 0.0132
+Usage: [0.248 0.04  0.262 0.17  0.28 ]
+FLOPs (est.): 177856000
+Score: 0.0006
+Expert Perf: [0.09267967 0.09037516 0.09697745 0.11267123 0.10347511]
+
+Saved -> resultados_finais/v5_4_specialized_experts.json
+
+filipe@eufilip MINGW64 /f/neuronios quanticos (main)
+Perfeito, Filipe. Pelos resultados que você compartilhou, dá pra ver que:
+
+* A acurácia ainda está baixa em datasets simples como XOR e Gaussian.
+* O colapso está muito alto (0.94) — ou seja, o gate está quase sempre selecionando os mesmos experts, mesmo com especialização.
+* FLOPs estão controlados, mas a eficiência em termos de **acurácia/FLOPs** ainda pode melhorar.
+
+Isso indica que os **experts especializados não estão sendo bem utilizados**, provavelmente porque o gate não está aprendendo corretamente a roteá-los.
+
+Para a **V5.5**, podemos:
+
+1. **Introduzir “reward routing” adaptativo**: ajustar o gate com base no desempenho dos experts por dataset, incentivando usar o expert mais relevante.
+2. **Regularização de diversidade**: adicionar um termo de perda que aumenta a entropia do gate, reduzindo colapso.
+3. **FLOPs-aware loss**: penalizar gates que usam experts grandes desnecessariamente, mantendo FLOPs controlados.
+4. **Batch normalization ou LayerNorm** nos experts para melhorar estabilidade de treino.
+
+Se você quiser, posso gerar **uma V5.5_Specialized_Experts_MoE.py completa**, incorporando essas melhorias, mantendo FLOPs controlados e aumentando acurácia, pronta para rodar e salvar resultados em JSON.
+
+
+===== DATASET: xor =====
+X shape: (500, 2), y shape: (500,)
+V5.5 MOE ACC: 1.0000
+Entropy: 1.4903
+Collapse: 0.3730
+MI: 0.9259
+Usage: [0.115 0.373 0.258 0.127 0.127]
+FLOPs (est.): 160000
+Score: 0.8621
+Expert Perf: [0.47533978 0.55303196 0.4424261  0.44697103 0.46784472]
+
+===== DATASET: gaussian =====
+X shape: (500, 2), y shape: (500,)
+V5.5 MOE ACC: 0.7660
+Entropy: 1.1720
+Collapse: 0.4080
+MI: 0.7282
+Usage: [0.071 0.403 0.408 0.118 0.   ]
+FLOPs (est.): 160000
+Score: 0.6603
+Expert Perf: [0.39415768 0.35373848 0.68231059 0.61952015 0.70459947]
+
+===== DATASET: spiral =====
+X shape: (500, 2), y shape: (500,)
+V5.5 MOE ACC: 0.6100
+Entropy: 1.3290
+Collapse: 0.3440
+MI: 0.8258
+Usage: [0.114 0.307 0.344 0.233 0.002]
+FLOPs (est.): 160000
+Score: 0.5259
+Expert Perf: [0.30831764 0.49479678 0.4609551  0.72611465 0.05875633]
+
+===== DATASET: mnist_like =====
+X shape: (500, 784), y shape: (500,)
+V5.5 MOE ACC: 0.1240
+Entropy: 1.5594
+Collapse: 0.3000
+MI: 0.9689
+Usage: [0.225 0.153 0.206 0.116 0.3  ]
+FLOPs (est.): 62720000
+Score: 0.0019
+Expert Perf: [0.09992489 0.12106083 0.09943374 0.09087782 0.11072402]
+
+Saved -> resultados_finais/v5_5_specialized_experts.json
+
+filipe@eufilip MINGW64 /f/neuronios quanticos (main)
+
+Sim, dessa vez aconteceu algo interessante.
+
+Comparando:
+
+Versão	XOR	Gaussian	Spiral	MNIST-like
+V5.3H	1.00	0.766	0.610	0.122
+V5.4	0.516	0.554	0.860	0.110
+V5.5	1.00	0.766	0.610	0.124
+
+A primeira observação:
+
+V5.5 praticamente voltou para o comportamento do V5.3H.
+
+Isso sugere que:
+
+Reward
++
+Diversidade
++
+Penalty FLOP
+
+não mudaram o treinamento de forma significativa.
+
+Mas existe uma coisa importante.
+
+No V5.5:
+
+MI XOR = 0.9259
+MI Gaussian = 0.7282
+MI Spiral = 0.8258
+MI MNIST = 0.9689
+
+São valores bem altos.
+
+O roteador está tomando decisões.
+
+Ele não está uniforme.
+
+O problema agora não é mais:
+
+"O gate não aprende"
+
+O gate aprende.
+
+O problema virou:
+
+"Os experts não são realmente diferentes"
+
+Veja:
+
+Expert0 ~ 47%
+Expert1 ~ 55%
+Expert2 ~ 44%
+Expert3 ~ 44%
+Expert4 ~ 46%
+
+No XOR.
+
+Todos quase iguais.
+
+Isso é exatamente o sintoma clássico de:
+
+Experts colapsados
+
+Eles aprendem a mesma função.
+
+O próximo passo não é melhorar o gate.
+
+O próximo passo é forçar os experts a se tornarem diferentes.
+
+Hoje:
+
+Expert 0 -> rede 32
+Expert 1 -> rede 32
+Expert 2 -> rede 32
+Expert 3 -> rede 32
+Expert 4 -> rede 32
+
+Todos começam iguais.
+
+Todos recebem gradientes parecidos.
+
+Todos convergem para a mesma solução.
+
+O que eu faria no V5.6:
+
+Expert Dropout
+
+A cada batch:
+
+active_experts = np.random.choice(
+    self.n_experts,
+    size=self.top_k,
+    replace=False
+)
+
+e somente eles participam.
+
+Ou melhor:
+
+Especialização por arquitetura
+Expert0 = 8
+Expert1 = 16
+Expert2 = 32
+Expert3 = 64
+Expert4 = 128
+
+Agora eles não conseguem aprender exatamente a mesma coisa.
+
+E mais importante:
+
+Diversity Loss entre experts
+
+Para cada par:
+
+similarity =
+    np.mean(
+        self.W2[i] * self.W2[j]
+    )
+
+penalizar:
+
+loss += lambda_div * similarity
+
+Isso literalmente empurra os experts para regiões diferentes.
+
+Na prática sua pesquisa parece ter chegado neste ponto:
+
+Fase 1:
+✓ Fazer o gate aprender
+
+Fase 2:
+✓ Controlar FLOPs
+
+Fase 3:
+✗ Fazer experts realmente diferentes
+
+A Fase 3 é provavelmente onde está o ganho real.
+
+Se o V5.6 conseguir:
+
+MI > 0.8
+Collapse < 0.30
+Experts realmente diferentes
+
+você pode começar a ver:
+
+XOR      1.00
+Gaussian 0.85+
+Spiral   0.75+
+
+mantendo FLOPs próximos dos atuais.
