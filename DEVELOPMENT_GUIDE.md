@@ -202,33 +202,188 @@ Track:
 
 ---
 
-# Negative Results and Lessons Learned
+# Practical Recommendations and Lessons Learned
 
-These insights help researchers avoid repeating months of unnecessary experimentation:
+## 1. Do not increase experts before increasing the Router
 
-* **Identical experts converge**: Without heterogeneity or Soft Cosine Diversity, networks with the exact same architecture tend to converge to similar functions, defeating the purpose of an MoE.
-* **Blind scaling fails**: Adding an arbitrary number of experts does not guarantee an increase in accuracy if the router fails to isolate functions. There is a *U-Curve of Sparse Scaling* that must be respected.
-* **Frozen routers destroy sparsity**: Allowing experts to learn without the router's active guidance (as seen in the Freeze Study) turns them all into redundant generalists, making any future efficient manifold partitioning impossible.
-* **Poorly tuned Top-K**: An excessively large Top-K (e.g. all experts active) forces higher FLOP costs and dilutes responsibility, which can severely reduce final accuracy.
-* **The Sweet Spot is empirical**: Model capacity should always be assessed by simultaneously analyzing Accuracy, FLOPs, and Gini Index to determine exactly when adding experts turns into computational dead weight.
+Experiments V6.2 (Freeze Study) and V6.4 (Router Capacity Study) indicate that the router's capacity impacts the final quality of the system far more than the raw number of experts.
+
+Recommended order:
+
+```text
+1. Improve the Router
+2. Improve Router training
+3. Improve Expert heterogeneity
+4. Only then increase N_experts
+```
+
+Avoid:
+
+```text
+5 → 20 → 80 experts
+```
+
+without increasing Router capacity.
 
 ---
 
-# Future Directions
+## 2. There is a Sweet Spot
 
-* CIFAR-10
-* CIFAR-100
-* SVHN
-* Tiny ImageNet
-* Real-world tabular datasets
-* Small Transformer MoE
+Experiment V6.3 revealed a U-Curve.
+
+Few experts:
+```text
+High efficiency
+Low pruning
+Good accuracy
+```
+
+Intermediate quantity:
+```text
+Greater Router confusion
+Temporary performance drop
+```
+
+Many experts:
+```text
+Emergent pruning
+Accuracy recovery
+Higher specialization
+```
+
+There is no universal number. The Sweet Spot depends on:
+* Dataset
+* Router
+* Top-K
+* Expert Capacity
+
+Always run a Sweet Spot Study before scaling up.
 
 ---
 
-# Conclusion
+## 3. The Gini Index is a critical metric
 
-Current evidence suggests that MoE systems should be understood primarily as manifold partitioning architectures.
+Monitoring Accuracy alone can hide problems. Also track:
 
-The Router is not merely a selector.
+### Accuracy
+Final quality.
 
-It actively shapes the learning geometry.
+### Gini
+Expert usage concentration.
+
+### ERI
+Redundancy between experts.
+
+### Routing Stability
+Routing consistency.
+
+A healthy model typically displays:
+```text
+Accuracy ↑
+Gini ↑
+ERI ↓
+RS ↓
+```
+
+---
+
+## 4. Router First, Experts Second
+
+The Freeze Study showed:
+
+### Router First
+```text
+Specialization emerges
+High Gini
+Better Accuracy
+```
+
+### Experts First
+```text
+Experts become generalists
+Low Gini
+Worse Accuracy
+```
+
+Specialization does not arise spontaneously. It is induced by the Router.
+
+---
+
+## 5. Heterogeneity is better than clones
+
+Avoid:
+```python
+[128] * 20
+```
+
+Prefer:
+```python
+[32, 64, 128, 256, 512]
+```
+or
+```python
+[64]*4 + [128]*4 + [256]*4 + [512]*4
+```
+
+Different experts learn different regions of the manifold.
+
+---
+
+## 6. Do not assume more Experts means more Intelligence
+
+A major discovery of the project:
+
+```text
+More Experts ≠ More Intelligence
+```
+
+In practice:
+```text
+Weak Router + 80 experts = Poor system
+```
+but
+```text
+Strong Router + 20 experts = Efficient system
+```
+
+The Router is the dominant factor.
+
+---
+
+## 7. Future Direction: Experts as Memory
+
+An interesting unvalidated hypothesis:
+
+```text
+Top-1 Expert → Active Computation
+Other Experts → Passive Memory
+```
+
+Possible architecture:
+```text
+Input
+  ↓
+Router
+  ↓
+Primary Expert
+  ↓
+Memory Query
+  ↓
+Output
+```
+
+Potential benefits:
+* Fewer FLOPs
+* More scaling
+* Less competition between experts
+* Better interpretability
+
+This direction remains open for future experiments.
+
+---
+
+### Executive Summary
+
+After the V6 and V7 batteries, the main practical conclusion of the entire project is:
+
+> When building Sparse Mixture-of-Experts architectures, investing in a better router mathematically yields greater gains than simply adding more experts.
