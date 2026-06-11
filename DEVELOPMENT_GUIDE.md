@@ -181,7 +181,7 @@ This experiment produced the central discovery of the project.
 
 ## Sweet Spot Test
 
-Evaluate:
+Evaluate extreme scale:
 
 ```python
 N_experts = [5, 10, 20, 40, 80]
@@ -194,9 +194,11 @@ Track:
 * ERI
 * Gini
 
-Purpose:
-
-Identify the optimal expert count before diminishing returns.
+**Sweet Spot Guidance (U-Curve of Sparse Scaling)**:
+- Always test multiple values for `N_experts` simultaneously.
+- Identify the exact point where adding more experts begins to generate redundancy and accuracy loss (the valley of the U-Curve, often between N=10 and N=20).
+- Monitor the Gini Index to confirm **Emergent Pruning**. If the Gini fails to spike (e.g., > 0.85) when scaling to N=80, the router is failing to actively partition the manifold.
+- The absolute Sweet Spot occurs at extreme saturation (very high N) where accuracy fully recovers via active pruning without penalizing inference FLOPs (since Top-K is rigidly small). Plot `Accuracy vs N_experts` to visually isolate the optimal recovery point.
 
 ---
 

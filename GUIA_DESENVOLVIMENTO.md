@@ -179,7 +179,7 @@ Esse experimento foi responsável pela principal descoberta do projeto.
 
 ## Sweet Spot Test
 
-Avaliar:
+Avaliar a escala extrema:
 
 ```python
 N_experts = [5, 10, 20, 40, 80]
@@ -192,9 +192,11 @@ Medir:
 * ERI
 * Gini
 
-Objetivo:
-
-Encontrar o ponto onde mais experts deixam de trazer benefício.
+**Diretrizes do Sweet Spot (U-Curve of Sparse Scaling)**:
+- Sempre teste múltiplos valores de `N_experts` simultâneos.
+- Identifique o ponto em que mais experts começam a gerar redundância e perda de acurácia (o vale da U-Curve, geralmente entre N=10 e N=20).
+- Observe o Gini Index para confirmar o **Pruning Emergente**. Se Gini não disparar (ex: > 0.85) ao se escalar para N=80, o roteador está falhando em particionar a manifold.
+- O Sweet Spot absoluto ocorre na saturação final (N muito alto), onde a acurácia é recuperada ao máximo através da poda ativa, não penalizando os FLOPs de inferência (pois o Top-K é rígido e pequeno). Plote `Accuracy vs N_experts` para visualizar o ponto ótimo de recuperação.
 
 ---
 
