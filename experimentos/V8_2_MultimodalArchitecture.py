@@ -32,7 +32,18 @@ class HeterogeneousMoE(nn.Module):
             x = x.view(-1, orig_shape[-1])
             
         logits = self.router(x)
+        
+        # 1. Noisy Routing (apenas no treinamento) para forçar exploração
+        if self.training:
+            noise = torch.randn_like(logits) * 0.05
+            logits = logits + noise
+            
         gate_probs = F.softmax(logits, dim=-1)
+        
+        # 2. Load Balancing Loss para punir colapso
+        importance = gate_probs.sum(dim=0)
+        mean_importance = importance.mean()
+        bal_loss = 0.05 * ((importance - mean_importance)**2).mean()
         
         # Top-K Routing
         topk_probs, topk_indices = torch.topk(gate_probs, self.top_k, dim=-1)
@@ -53,7 +64,7 @@ class HeterogeneousMoE(nn.Module):
             out = out.view(orig_shape[0], orig_shape[1], -1)
             gate_probs = gate_probs.view(orig_shape[0], orig_shape[1], -1)
             
-        return out, gate_probs
+        return out, gate_probs, bal_loss
 
 class V8_ImageToCode_Model(nn.Module):
     def __init__(self, vocab_size, embed_dim=128, lstm_dim=256, expert_sizes=[16, 32, 64, 128, 256]):
@@ -104,12 +115,12 @@ class V8_ImageToCode_Model(nn.Module):
         combined_context = torch.cat([v_context_expanded, lstm_out], dim=-1) # [B, Seq, lstm_dim * 2]
         
         # 4. Roteamento pelo MoE
-        moe_out, gate_probs = self.moe(combined_context) # [B, Seq, lstm_dim]
+        moe_out, gate_probs, bal_loss = self.moe(combined_context) # [B, Seq, lstm_dim]
         
         # 5. Previsão do Próximo Token
         logits = self.fc_out(moe_out) # [B, Seq, vocab_size]
         
-        return logits, gate_probs
+        return logits, gate_probs, bal_loss
 
 def test_architecture():
     print("Testando Arquitetura Multimodal V8_2...")
@@ -124,11 +135,12 @@ def test_architecture():
     model = V8_ImageToCode_Model(vocab_size=vocab_size)
     
     print(f"Alimentando modelo com Imagens {images.shape} e Tokens {tokens.shape}")
-    logits, gate_probs = model(images, tokens)
+    logits, gate_probs, bal_loss = model(images, tokens)
     
     print("\n[Sucesso] Forward Pass Concluído.")
     print(f"Logits gerados: {logits.shape} -> [Batch, Seq_Len, Vocab_Size]")
     print(f"Gate Probs:     {gate_probs.shape} -> [Batch, Seq_Len, N_Experts]")
+    print(f"Balancing Loss: {bal_loss.item():.4f}")
     print("\nA Arquitetura está pronta para medir a especialização visual vs sintática.")
 
 if __name__ == "__main__":

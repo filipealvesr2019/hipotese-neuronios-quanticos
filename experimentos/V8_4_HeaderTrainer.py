@@ -144,10 +144,12 @@ def main():
             targets = seqs[:, 1:]
             
             optimizer.zero_grad()
-            logits, gate_probs = model(images, inputs)
+            logits, gate_probs, bal_loss = model(images, inputs)
             
             # Formatar para CrossEntropy: [Batch * Seq_Len, Vocab]
-            loss = criterion(logits.reshape(-1, vocab_size), targets.reshape(-1))
+            ce_loss = criterion(logits.reshape(-1, vocab_size), targets.reshape(-1))
+            loss = ce_loss + bal_loss # Adiciona a penalidade de desbalanceamento
+            
             loss.backward()
             optimizer.step()
             
@@ -164,7 +166,7 @@ def main():
     with torch.no_grad():
         images, seqs = next(iter(dataloader))
         inputs = seqs[:, :-1]
-        logits, gate_probs = model(images, inputs) # gate_probs: [Batch, Seq, Experts=5]
+        logits, gate_probs, _ = model(images, inputs) # gate_probs: [Batch, Seq, Experts=5]
         
         # Iterar sobre todos os batches e sequencias
         for b in range(inputs.size(0)):
