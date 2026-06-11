@@ -191,3 +191,207 @@ RELATÓRIO ESTATÍSTICO DE ESPECIALIZAÇÃO FUNCIONAL
 
 filipe@eufilip MINGW64 /f/neuronios quanticos (main)
 $
+Esse resultado é muito mais difícil de descartar como simples acaso do que o anterior.
+
+O que eu vejo:
+
+### V8.4 (só headers)
+
+```text
+Expert 0 -> HTML
+Expert 1 -> CSS
+Expert 2 -> Texto
+Expert 4 -> Texto
+```
+
+Mas alguém poderia argumentar:
+
+> "Você só treinou headers. Talvez tenha decorado tokens."
+
+Justo.
+
+---
+
+### V8.5 (Headers + Cards + Forms + Navbars + Footers)
+
+Agora temos:
+
+```text
+Expert 0 (16)  -> 73% CSS
+Expert 1 (32)  -> HTML
+Expert 2 (64)  -> HTML + Texto
+Expert 3 (128) -> HTML + Texto
+Expert 4 (256) -> praticamente não usado
+```
+
+Isso muda a conversa.
+
+---
+
+## O que me chamou atenção
+
+O Expert 4 (256 neurônios) não venceu.
+
+Isso é importante.
+
+Se sua hipótese fosse:
+
+> "Expert maior sempre ganha"
+
+o resultado deveria ser:
+
+```text
+256 domina tudo
+128 domina quase tudo
+16 não serve para nada
+```
+
+Mas ocorreu o oposto.
+
+O expert de 16 neurônios continua extremamente competitivo.
+
+Isso sugere que o roteador não está escolhendo apenas capacidade bruta.
+
+Ele parece estar escolhendo algo relacionado ao custo-benefício daquela representação.
+
+---
+
+## Outra observação importante
+
+O dataset ficou MUITO mais difícil.
+
+A loss saiu de:
+
+```text
+0.67
+```
+
+para:
+
+```text
+0.38
+```
+
+mesmo com:
+
+* Headers
+* Cards
+* Forms
+* Navbars
+* Footers
+
+misturados.
+
+Isso significa que o pipeline inteiro:
+
+```text
+Imagem
+↓
+ResNet
+↓
+LSTM
+↓
+MoE
+↓
+HTML
+```
+
+está aprendendo algo real.
+
+Não parece um sistema quebrado.
+
+---
+
+## O que ainda não foi provado
+
+Você ainda não provou:
+
+> Expert 16 aprende CSS porque é pequeno.
+
+Você apenas observou correlação.
+
+Para provar causalidade teria que repetir com:
+
+```text
+[16,32,64,128,256]
+
+[256,128,64,32,16]
+
+[64,64,64,64,64]
+
+[32,64,128,256,512]
+```
+
+e verificar se:
+
+* a função segue o tamanho
+* ou segue a posição do expert
+
+Essa distinção é muito importante.
+
+---
+
+## O experimento que eu faria agora
+
+Nem aumentaria epochs.
+
+Nem aumentaria dataset.
+
+Nem aumentaria parâmetros.
+
+Eu faria uma análise nova.
+
+Em vez de:
+
+```text
+Qual expert gerou qual token?
+```
+
+eu mediria:
+
+```text
+Qual expert gerou qual componente?
+```
+
+Por exemplo:
+
+```text
+HEADER
+  Expert 0 -> 70%
+  Expert 1 -> 20%
+  Expert 2 -> 10%
+
+FORM
+  Expert 3 -> 65%
+
+CARD
+  Expert 2 -> 80%
+
+FOOTER
+  Expert 1 -> 75%
+```
+
+Se aparecer algo assim, aí a história fica realmente interessante.
+
+Porque você sai de:
+
+> especialização de token
+
+para
+
+> especialização de conceito
+
+E para um futuro Image→Code ou IDE multiagente, essa segunda descoberta vale muito mais.
+
+---
+
+Minha leitura atual é:
+
+* V8.3 → colapso de roteamento.
+* V8.4 → especialização por categoria de token.
+* V8.5 → especialização continua existindo mesmo com diversidade estrutural.
+* Próximo passo → descobrir se os experts estão aprendendo **componentes inteiros** (Header, Card, Form, Footer) e não apenas pedaços de sintaxe.
+
+Se eu estivesse conduzindo o projeto, esse seria exatamente o experimento V8.6. Ele responderia a pergunta mais importante até agora:
+
+> O roteador está separando caracteres, ou está separando conceitos?
