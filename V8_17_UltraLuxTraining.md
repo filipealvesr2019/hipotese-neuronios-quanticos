@@ -185,3 +185,86 @@ O que está acontecendo aqui é o **colapso de roteamento do Expert 1**. Ele est
    * Criar mais variantes de DOM profundo, mixando layouts e estilos, para que **nenhum Expert consiga capturar 90% sozinho**.
    * Ex.: combinando horizontal + vertical + grid + glassmorphism em cada componente.
 
+
+
+Perfeito. Vamos montar o **Ultra-Luxo 2.0**, desenhado para obrigar os Experts a se especializar de forma equilibrada, sem perder fidelidade visual ou complexidade de DOM. Aqui está o plano:
+
+---
+
+## 1️⃣ Estratégia de Roteamento Balanceado
+
+1. **Clusterização por complexidade**
+
+   * Dividimos os 10 esqueletos (Headers, Footers, Cards, Forms, Navbars) em **subgrupos**:
+
+     * Simples: Depth 3-4, tags ≤ 8 → Expert 0
+     * Médio: Depth 5-6, tags 9-12 → Expert 1
+     * Complexo: Depth 6-7, tags 13-18 → Expert 2
+     * Ultra: Depth 7-8, tags > 18 → Expert 3
+     * Variantes visuais: Expert 4
+
+2. **Forçar diversificação**
+
+   * Para cada batch, limitamos a probabilidade máxima de roteamento para qualquer Expert a **40%**.
+   * Loss de balanceamento (`Bal Loss`) é aumentado dinamicamente se um Expert ultrapassar 40% de tokens por batch.
+
+3. **Especialização visual**
+
+   * Themes/Styles/Layout são distribuídos propositalmente:
+
+     * Expert 0 → minimal + light
+     * Expert 1 → flat + brand
+     * Expert 2 → glassmorphism + dark
+     * Expert 3 → grid layouts complexos
+     * Expert 4 → casos mistos / borda experimental
+
+---
+
+## 2️⃣ Dataset Ultra-Luxo 2.0
+
+1. **Criação de Templates Sintéticos Puro Tailwind**
+
+   * Mantemos **DOM fixo** para cada componente, mas variamos:
+
+     * `theme_bg`, `theme_text`, `style_border`, `style_glass`, `layout_direction`
+   * Cada template gera **6 variantes** (2x Theme × 3x Style × 1 Layout)
+   * Total: 10 esqueletos × 6 variantes × 5 Experts → 300 samples por Expert.
+
+2. **Fragmentação artificial**
+
+   * Para Depths e número de tags, cada Expert recebe batches separados de acordo com cluster acima.
+   * Evita que Expert 1 “engula” tudo.
+
+3. **Aumento de diversidade**
+
+   * Shuffle de imagens, ícones e textos.
+   * Randomização de `padding`, `margin` e `grid-cols` para quebrar padrões fáceis.
+
+---
+
+## 3️⃣ Treinamento
+
+* **Hyperparams**:
+
+  ```python
+  entropy_regularization = 0.5  # força roteador a explorar mais Experts
+  load_balance_loss = 5.0        # alto para evitar monopolização
+  max_expert_prob = 0.4          # não mais de 40% de tokens por Expert
+  ```
+* **Batch composition**: cada batch deve conter pelo menos 1 token de cada cluster, garantindo que todos os Experts sejam acionados.
+
+---
+
+## 4️⃣ Resultados Esperados
+
+* Heatmaps de Experts devem mostrar **distribuição quase uniforme**:
+
+  * Expert 0 → Headers simples + minimal
+  * Expert 1 → Forms e Cards médios
+  * Expert 2 → Footers e Cards complexos
+  * Expert 3 → Heroes e Grid layouts profundos
+  * Expert 4 → Misturas/variantes
+
+* CE Loss total ainda deve diminuir, mas agora **Bal Loss será alto se qualquer Expert tentar monopolizar**, garantindo justiça na especialização.
+
+---
