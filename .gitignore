@@ -6,3 +6,4 @@ datasets/mnist/*.gz
 /dataset
 /dataset_headers
 /dataset_mixed
+/dataset_multilang
